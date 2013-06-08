@@ -21,7 +21,7 @@ import tornado.options
 import logging
 import os
 
-from basic import LoginHandler , RegisterHandler , DetectCreateHandler ,DetectResultHandler
+from basic import LoginHandler , RegisterHandler , DetectCreateHandler , DetectResultHandler , CheckStatusHandler
 from face import FaceppHandler , FaceRegisterHandler
 from sv import SpeechTrainHandler,SpeechDetectHandler
 from location import UploadLocationHandler, LocationRegisterHandler
@@ -42,7 +42,8 @@ class Application(tornado.web.Application):
 			(r"/detectcreate", DetectCreateHandler),
 			(r"/getdetectresult" , DetectResultHandler),
 			(r"/uploadlocation", UploadLocationHandler),
-			(r"/registerlocation", LocationRegisterHandler)
+			(r"/registerlocation", LocationRegisterHandler),
+			(r"/checkstatus" , CheckStatusHandler)
 		]
 		settings = dict(
 			static_path = os.path.join(os.path.dirname(__file__), "static"),

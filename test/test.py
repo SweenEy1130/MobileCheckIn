@@ -19,6 +19,22 @@ def test():
 	conn.request("GET","/test")
 	r1 = conn.getresponse()
 	print r1.read()
+	conn.close()
+
+def test_checkstatus():
+	#GET
+	global client_cookie
+	headers = {"Content-type":"application/json",
+				"Accept":"text/plain",
+				"Connection": "Keep-Alive", 
+				"Cache-Control": "no-cache" ,
+				"Cookie": client_cookie}
+	conn = httplib.HTTPConnection("127.0.0.1:8000")
+	conn.request("GET","/checkstatus", body = '' , headers = headers)
+	r1 = conn.getresponse()
+	print "Check Status:"
+	print r1.read()
+	conn.close()
 
 def test_login(username,password):
 	# POST
@@ -158,7 +174,7 @@ def test_detect_result():
 	print 'Detect Result:\n',r.text
 
 if __name__ == "__main__":
-	username = "hagain"
+	username = "hagain1"
 	password = "1234"
 	# User's image
 	img_name = "hjr-01.jpg"
@@ -171,13 +187,14 @@ if __name__ == "__main__":
 	# test()
 	# test_register(username,password)
 	test_login(username,password)
+	test_checkstatus()
 	# test_location_register(1)
 	# test_faceregister(img_name)
 	# test_svtrain(voi_train_name1 , voi_train_name2 , voi_train_name3)
-	test_detect_create()
+	# test_detect_create()
 	# 121.475886,31.236797 SH
 	# 116.393058, 39.915599	BJ
-	test_location_upload(39.915599 , 116.393058)
-	test_faceverify(img_name)
-	test_svdetect(voi_detect_name)
-	test_detect_result()
+	# test_location_upload(39.915599 , 116.393058)
+	# test_faceverify(img_name)
+	# test_svdetect(voi_detect_name)
+	# test_detect_result()

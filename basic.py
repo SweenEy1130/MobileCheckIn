@@ -150,6 +150,38 @@ class RegisterHandler(BaseHandler):
     def db(self):
         return self.application.db
 
+"""check user status
+API:    
+GET: http://localhost:8000/checkstatus
+HEADER:  {  "Content-type":"application/json",
+            "Accept":"text/plain",
+            "Connection": "Keep-Alive", 
+            "Cache-Control": "no-cache",
+            "Cookie": client_cookie }
+RESPONSE:{  "error":0}
+error:  0 for success
+        1 for not login
+        2 for sql error
+"""
+class CheckStatusHandler(BaseHandler):
+    def get(self):
+        if not self.current_user:
+            self.write({"error":2})
+            return
+        uid = self.current_user
+        # try:
+        info = self.db.query('SELECT IMAGESAMPLE,AUDIOENGINE,LOCID FROM USER WHERE UID = %s;' % (uid))
+        res = info[0]
+        res['error'] = 0
+        self.write(res)
+        return
+        # except:
+        #     self.write({"error":2})
+        #     return 
+    @property
+    def db(self):
+        return self.application.db
+
 """DetectCreate API
 API http://localhost:8000/detectcreate
 POST:   http://localhost:8000/detectcreate
