@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="{{static_url("css/style.css")}}" type="text/css" media="screen" />
 <!-- Invalid Stylesheet. This makes stuff look pretty. Remove it if you want the CSS completely valid -->
 <link rel="stylesheet" href="{{static_url("css/invalid.css")}}" type="text/css" media="screen" />
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 <!--                       Javascripts                       -->
 <!-- jQuery -->
 <script type="text/javascript" src="{{static_url("scripts/jquery-1.3.2.min.js")}}"></script>
@@ -22,71 +23,35 @@
 <!-- jQuery Datepicker Plugin -->
 <script type="text/javascript" src="{{static_url("scripts/jquery.datePicker.js")}}"></script>
 <script type="text/javascript" src="{{static_url("scripts/jquery.date.js")}}"></script>
-<script type="text/javascript">
-function ischeckNum()
-{
- var num = document.getElementById('small-input2').value;
- var op = document.getElementById('search_type').value;
- if(num)
- {
-  if(isNaN(num) && op == "option2")
-  {
-   alert('请输入的学号含有非数字');
-   return false;
-  }
-  else
-   return true;
- }
- else
- {
-  alert('需输入内容');
-  return false;
- }
-}
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script type="text/javascript" src="{{static_url("scripts/jquery.js")}}"></script>
+<!-- Navigation jquery -->
+<script type="text/javascript" src="{{static_url("scripts/jquery.simplePagination.js")}}"></script>
+<!-- Navigation jquery -->
+<script>
+$(function() {
+  $( "#datepicker1" ).datepicker();
+});
+$(function() {
+  $( "#datepicker2" ).datepicker();
+});
 </script>
-<script type="text/javascript">
-function EditFunction(index,op){
-    var xmlhttp;
-    var uid,dt,notification;
-    uid=document.getElementById("uid"+index).innerHTML;
-    dt=document.getElementById("dt"+index).innerHTML;
-    if(op==1){
-      notification="你确定确认该次签到吗？";
-    }
-    else if(op==2){
-      notification="你确定重置此用户吗？";
-    }
-    else if(op==3){
-      notification="你确定删除此次验证吗？";
-    }
-    else
-    {return;}
-    var r=confirm(notification);
-    if (r==false){return;}
-    if (window.XMLHttpRequest){//e for IE7+, Firefox, Chrome, Opera, Safari
-      xmlhttp=new XMLHttpRequest();
-      }
-    else{// code for IE6, IE5
-      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-      }
-
-    xmlhttp.onreadystatechange=function()
-      {
-      if (xmlhttp.readyState==4 && xmlhttp.status==200)
-        {
-        var resTex=xmlhttp.responseText;
-        if (resTex=='0' && op==3){
-           var str=".table" + index;
-           $(str).fadeTo(400, 0, function(){$(this).slideUp(400);});
-          }
-        else if(resTex=='0' && op==2){
-          alert("用户信息已重置！");
-        }
-        }
-      }
-    url="/admin/student/edit?uid="+ uid + "&op="+ op+"&dt="+dt;
-    xmlhttp.open("GET",url,true);
-    xmlhttp.send();
+<script>
+function isDate(){
+  var startDtVal = document.getElementById("datepicker1").value
+  var entDtVal = document.getElementById("datepicker2").value
+  var stT = startDtVal.split("/");
+  var enT = entDtVal.split("/");
+  var date1=new Date();
+  date1.setFullYear(Number(stT[2]),Number(stT[0]),Number(stT[1]));
+  var date2=new Date();
+  date2.setFullYear(Number(enT[2]),Number(enT[0]),Number(enT[1]));
+  if(date1.valueOf()>date2.valueOf()){
+    alert("开始日期不能大于结束日期！");
+    return false;
+  }
+  return true;
 }
 </script>
 </head>
@@ -116,17 +81,17 @@ function EditFunction(index,op){
           <!-- Add the class "current" to current menu item -->
           &#31614;&#21040;&#24773;&#20917; </a>
           <ul>
-            <li><a class="current" href="#">&#23398;&#29983;&#20449;&#24687;</a></li>
-            <li><a href="/admin/checkin">&#31614;&#21040;&#26597;&#35810;</a></li>
+            <li><a href="/admin/student">&#23398;&#29983;&#20449;&#24687;</a></li>
+            <li><a class="current" href="#">&#31614;&#21040;&#26597;&#35810;</a></li>
             <!-- Add class "current" to sub menu items also -->
-            <li><a href="/admin/rule">&#31614;&#21040;&#35268;&#21017;</a>
+            <li><a href="/admin/rule">&#31614;&#21040;&#35268;&#21017;</a></li>
           </ul>
         </li>
         <li> <a href="#" class="nav-top-item"> &#32479;&#35745;&#20449;&#24687;</a>
           <ul>
             <li><a href="/admin/time_static">&#31614;&#21040;&#26102;&#38388;&#32479;&#35745;</a></li>
             <li><a href="/admin/map_static">&#31614;&#21040;&#20301;&#32622;&#32479;&#35745;</a></li>
-       </ul>
+          </ul>
         </li>
         <li> <a href="#" class="nav-top-item"> &#35774;&#32622;</a>
           <ul>
@@ -136,32 +101,6 @@ function EditFunction(index,op){
         </li>
       </ul>
       <!-- End #main-nav -->
-      <div id="messages" style="display: none">
-        <!-- Messages are shown when a link with these attributes are clicked: href="#messages" rel="modal"  -->
-        <h3>3 Messages</h3>
-        <p> <strong>17th May 2009</strong> by Admin<br />
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. <small><a href="#" class="remove-link" title="Remove message">Remove</a></small> </p>
-        <p> <strong>2nd May 2009</strong> by Jane Doe<br />
-          Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est. <small><a href="#" class="remove-link" title="Remove message">Remove</a></small> </p>
-        <p> <strong>25th April 2009</strong> by Admin<br />
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. <small><a href="#" class="remove-link" title="Remove message">Remove</a></small> </p>
-        <form action="#" method="post">
-          <h4>New Message</h4>
-          <fieldset>
-          <textarea class="textarea" name="textfield" cols="79" rows="5"></textarea>
-          </fieldset>
-          <fieldset>
-          <select name="dropdown" class="small-input">
-            <option value="option1">Send to...</option>
-            <option value="option2">Everyone</option>
-            <option value="option3">Admin</option>
-            <option value="option4">Jane Doe</option>
-          </select>
-          <input class="button" type="submit" value="Send" />
-          </fieldset>
-        </form>
-      </div>
-      <!-- End #messages -->
     </div>
   </div>
   <!-- End #sidebar -->
@@ -182,11 +121,9 @@ function EditFunction(index,op){
     <div class="content-box">
       <!-- Start Content Box -->
       <div class="content-box-header">
-        <h3>&#23398;&#29983;&#20449;&#24687;&#26597;&#35810;</h3>
+        <h3>签到查询</h3>
         <ul class="content-box-tabs">
-          <li><a href="#tab1" class="default-tab">查询学生情况</a></li>
-          <!-- href must be unique and match the id of target div -->
-          <li><a href="#tab2">&#20869;&#23481;</a></li>
+          <li><a href="#tab1" class="default-tab">学生签到信息</a></li>
         </ul>
         <div class="clear"></div>
       </div>
@@ -199,14 +136,10 @@ function EditFunction(index,op){
             <div> &#26597;&#35810;&#30340;&#32467;&#26524;&#20250;&#22312;&#19979;&#34920;&#26174;&#31034;&#12290;&#28857;&#20987;&#21491;&#19978;&#35282;&#30340;&#21449;&#21363;&#21487;&#20851;&#38381;&#25552;&#37266;&#12290; </div>
           </div>
           <div class="bulk-actions align-left">
-             <form action="/admin/student" method="GET" onsubmit="return ischeckNum()">
-                    <select id="search_type" name="op">
-                      <option value="option1">姓名</option>
-                      <option value="option2">学号</option>
-                      <option value="option3">用户名</option>
-                    </select>
-                    <input class="text-input small-input" type="text" id="small-input2" name="q" value="{{q}}"/>
-                    <input type="submit" value="&#26597;&#35810;">
+             <form action="/admin/checkin" method="GET" onsubmit="return isDate()">
+                    开始时间：<input type="text" id="datepicker1" name="start" value = "{{date1}}"/>
+                    结束时间：<input type="text" id="datepicker2" name="terminal" value = "{{date2}}"/>
+                    <input type="submit" value="&#26597;&#35810;" >
            </form>
           </div>
           <div class="clear"></div>
@@ -220,20 +153,27 @@ function EditFunction(index,op){
                 <th>&#22995;&#21517;</th>
                 <th>&#31614;&#21040;&#26102;&#38388;</th>
                 <th>&#31614;&#21040;&#24773;&#20917;</th>
-                <th>&#25805;&#20316;</th>
+                <th>学院</th>
               </tr>
               <tr class="clear"></tr>
             </thead>
             <tfoot>
               <tr>
                 <td colspan="6">
-                  <div class="pagination"> <a href="#" title="First Page">&laquo; First</a><a href="#" title="Previous Page">&laquo; Previous</a> <a href="#" class="number" title="1">1</a> <a href="#" class="number" title="2">2</a> <a href="#" class="number current" title="3">3</a> <a href="#" class="number" title="4">4</a> <a href="#" title="Next Page">Next &raquo;</a><a href="#" title="Last Page">Last &raquo;</a> </div>
+                  <div class="pagination"> 
+                    <a href="#" title="First Page">&laquo; First</a>
+                    <a href="#" title="Previous Page">&laquo; Previous</a> 
+                    <a href="#" class="number" title="1">1</a> 
+                    <a href="#" class="number" title="2">2</a>
+                    <a href="#" class="number current" title="3">3</a>
+                    <a href="#" class="number" title="4">4</a>
+                    <a href="#" title="Next Page">Next &raquo;</a>
+                    <a href="#" title="Last Page">Last &raquo;</a> </div>
                   <!-- End .pagination -->
                   <div class="clear"></div>
                 </td>
               </tr>
             </tfoot>
-
             <tbody>
             {%set index = 0%}
             {% for item in query_json %}
@@ -252,11 +192,7 @@ function EditFunction(index,op){
                   {% else %}
                           <td>未签到</td>
                   {% end %}
-                  <!-- Icons -->
-                <td>
-                <a href="#" onclick="EditFunction({{index}},1)" title="Edit" value={{str(index)}}><img src="{{static_url("images/icons/pencil.png")}}" title="修改" alt="Edit" /></a>
-                <a href="#" onclick="EditFunction({{index}},2)" title="Reset" value={{str(index)}}><img src="{{static_url("images/icons/hammer_screwdriver.png")}}" title="重置" alt="Reset" /></a>
-                <a href="#" onclick="EditFunction({{index}},3)" title="Delete" value={{str(index)}}><img src="{{static_url("images/icons/cross.png")}}" title="删除"alt="Delete" /></a></td>
+                <td>{{ item["DEPARTMENT"]}}</td>
               </tr>
               {% end %}
               <tr>
@@ -265,69 +201,12 @@ function EditFunction(index,op){
                 <td>-</td>
                 <td>-</td>
                 <td>-</td>
-                <td>
-                  <!-- Icons -->
-                  <a href="#" title="Edit"><img src="{{static_url("images/icons/pencil.png")}}" title="修改" alt="Edit" /></a>
-                  <a href="#" title="Reset"><img src="{{static_url("images/icons/hammer_screwdriver.png")}}" title="重置" alt="Reset" /></a>
-                  <a href="#" title="Delete"><img src="{{static_url("images/icons/cross.png")}}" title="删除"alt="Delete" /></a></td>
+                <td>-</td>
               </tr>
             </tbody>
           </table>
         </div>
         <!-- End #tab1 -->
-        <div class="tab-content" id="tab2">
-          <form action="#" method="post">
-            <fieldset>
-            <!-- Set class to "column-left" or "column-right" on fieldsets to divide the form into columns -->
-            <p>
-              <label>Small form input</label>
-              <input class="text-input small-input" type="text" id="small-input" name="small-input" />
-              <span class="input-notification success png_bg">Successful message</span>
-              <!-- Classes for input-notification: success, error, information, attention -->
-              <br />
-              <small>A small description of the field</small> </p>
-            <p>
-              <label>Medium form input</label>
-              <input class="text-input medium-input datepicker" type="text" id="medium-input" name="medium-input" />
-              <span class="input-notification error png_bg">Error message</span> </p>
-            <p>
-              <label>Large form input</label>
-              <input class="text-input large-input" type="text" id="large-input" name="large-input" />
-            </p>
-            <p>
-              <label>Checkboxes</label>
-              <input type="checkbox" name="checkbox1" />
-              This is a checkbox
-              <input type="checkbox" name="checkbox2" />
-              And this is another checkbox </p>
-            <p>
-              <label>Radio buttons</label>
-              <input type="radio" name="radio1" />
-              This is a radio button<br />
-              <input type="radio" name="radio2" />
-              This is another radio button </p>
-            <p>
-              <label>This is a drop down list</label>
-              <select name="dropdown" class="small-input">
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
-                <option value="option4">Option 4</option>
-              </select>
-            </p>
-            <p>
-              <label>Textarea with WYSIWYG</label>
-              <textarea class="text-input textarea wysiwyg" id="textarea" name="textfield" cols="79" rows="15"></textarea>
-            </p>
-            <p>
-              <input class="button" type="submit" value="Submit" />
-            </p>
-            </fieldset>
-            <div class="clear"></div>
-            <!-- End .clear -->
-          </form>
-        </div>
-        <!-- End #tab2 -->
       </div>
       <!-- End .content-box-content -->
     </div>

@@ -23,38 +23,48 @@
 <script type="text/javascript" src="{{static_url("scripts/jquery.datePicker.js")}}"></script>
 <script type="text/javascript" src="{{static_url("scripts/jquery.date.js")}}"></script>
 <script type="text/javascript">
-function queryStudents()
-{
-var xmlhttp;    
-if (window.XMLHttpRequest)
-  {// code for IE7+, Firefox, Chrome, Opera, Safari
-  xmlhttp=new XMLHttpRequest();
-  }
-else
-  {// code for IE6, IE5
-  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-  }
-xmlhttp.onreadystatechange=function()
-  {
-  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-    {
-      var query_json=eval(xmlhttp.responseText);
-      var info="";
-      
-      for(var i=0;i<query_json.length;i++){
-          info = info.concat("<tr><td><input type=\"checkbox\" /></td><td>",query_json[i].UID);
-          info = info.concat("</td><td><a href=\"#\" title=\"title\">",query_json[i].CHINAME);
-          info = info.concat("</a></td><td>",query_json[i].DETECTTIME);
-          info = info.concat("</td><td>",query_json[i].STATUS);
-         } 
-
-      document.getElementById("stuDiv").innerHTML=info;
+function EditFunction(index,op){
+    var xmlhttp;
+    var uid,dt,notification;
+    uid=document.getElementById("uid"+index).innerHTML;
+    dt=document.getElementById("dt"+index).innerHTML;
+    if(op==1){
+      notification="你确定修改此用户吗？";
     }
-  }
-q = document.getElementById("small-input2").value;
-op = document.getElementById("select-query").value;
-xmlhttp.open("GET","/admin/search?q="+q+"&op="+op,true);
-xmlhttp.send();
+    else if(op==2){
+      notification="你确定重置此用户吗？";
+    }
+    else if(op==3){
+      notification="你确定删除此次验证吗？";
+    }
+    else
+    {return;}
+    var r=confirm(notification);
+    if (r==false){return;}
+    if (window.XMLHttpRequest){//e for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+      }
+    else{// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+
+    xmlhttp.onreadystatechange=function()
+      {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+        var resTex=xmlhttp.responseText;
+        if (resTex=='0' && op==3){
+           var str=".table" + index;
+           $(str).fadeTo(400, 0, function(){$(this).slideUp(400);});
+          }
+        else if(resTex=='0' && op==2){
+          alert("用户信息已重置！");
+        }
+        }
+      }
+    url="/admin/student/edit?uid="+ uid + "&op="+ op+"&dt="+dt;
+    xmlhttp.open("GET",url,true);
+    xmlhttp.send();
 }
 </script>
 </head>
@@ -70,67 +80,15 @@ xmlhttp.send();
       <!-- Sidebar Profile links -->
       <div id="profile-links">
         <ul>
-          <li><strong>&#20320;&#22909;, {{chiname}}</strong><br />
+          <li><strong>&#20320;&#22909;, {%block USER%}None{% end %}</strong><br />
             <br />
           <a href="/admin/logout"><strong>&#30331;&#20986;</strong></a></li>
         </ul>
       </div>
       <ul id="main-nav">
-        <!-- Accordion Menu -->
-        <li> <a href="http://www.jwc.sjtu.edu.cn/"  target="_blank" class="nav-top-item no-submenu">
-          <!-- Add the class "no-submenu" to menu items with no sub menu -->
-          &#25945;&#21153;&#22788;&#20027;&#39029;</a> </li>
-        <li> <a href="#" class="nav-top-item current">
-          <!-- Add the class "current" to current menu item -->
-          &#31614;&#21040;&#24773;&#20917; </a>
-          <ul>
-            <li><a class="current" href="#">&#23398;&#29983;&#20449;&#24687;</a></li>
-            <li><a href="#">&#31614;&#21040;&#26597;&#35810;</a></li>
-            <!-- Add class "current" to sub menu items also -->
-            <li><a href="#">&#31614;&#21040;&#35268;&#21017;</a><a href="#">Manage Categories</a></li>
-          </ul>
-        </li>
-        <li> <a href="#" class="nav-top-item"> &#32479;&#35745;&#20449;&#24687;</a>
-          <ul>
-            <li><a href="#">&#31614;&#21040;&#26102;&#38388;&#32479;&#35745;</a></li>
-            <li><a href="#">&#31614;&#21040;&#20301;&#32622;&#32479;&#35745;</a></li>
-            <li><a href="#">Manage Albums</a></li>
-          </ul>
-        </li>
-        <li> <a href="#" class="nav-top-item"> &#35774;&#32622;</a>
-          <ul>
-            <li><a href="#">&#28155;&#21152;&#31649;&#29702;&#21592;</a></li>
-            <li><a href="#">&#31649;&#29702;&#21592;&#35774;&#32622;</a></li>
-          </ul>
-        </li>
-      </ul>
+        {% block nav %}
+        {% end %}
       <!-- End #main-nav -->
-      <div id="messages" style="display: none">
-        <!-- Messages are shown when a link with these attributes are clicked: href="#messages" rel="modal"  -->
-        <h3>3 Messages</h3>
-        <p> <strong>17th May 2009</strong> by Admin<br />
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. <small><a href="#" class="remove-link" title="Remove message">Remove</a></small> </p>
-        <p> <strong>2nd May 2009</strong> by Jane Doe<br />
-          Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est. <small><a href="#" class="remove-link" title="Remove message">Remove</a></small> </p>
-        <p> <strong>25th April 2009</strong> by Admin<br />
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. <small><a href="#" class="remove-link" title="Remove message">Remove</a></small> </p>
-        <form action="#" method="post">
-          <h4>New Message</h4>
-          <fieldset>
-          <textarea class="textarea" name="textfield" cols="79" rows="5"></textarea>
-          </fieldset>
-          <fieldset>
-          <select name="dropdown" class="small-input">
-            <option value="option1">Send to...</option>
-            <option value="option2">Everyone</option>
-            <option value="option3">Admin</option>
-            <option value="option4">Jane Doe</option>
-          </select>
-          <input class="button" type="submit" value="Send" />
-          </fieldset>
-        </form>
-      </div>
-      <!-- End #messages -->
     </div>
   </div>
   <!-- End #sidebar -->
@@ -163,23 +121,27 @@ xmlhttp.send();
       <div class="content-box-content">
         <div class="tab-content default-tab" id="tab1">
           <!-- This is the target div. id must match the href of this div's tab -->
-          <div class="notification attention png_bg"> <a href="#" class="close"><img src="{{static_url("images/icons/cross_grey_small.png")}}" title="Close this notification" alt="close" /></a>
+          <div class="notification attention png_bg">
+            <a href="#" class="close"><img src="{{static_url("images/icons/cross_grey_small.png")}}" title="关闭提醒" alt="close" /></a>
             <div> &#26597;&#35810;&#30340;&#32467;&#26524;&#20250;&#22312;&#19979;&#34920;&#26174;&#31034;&#12290;&#28857;&#20987;&#21491;&#19978;&#35282;&#30340;&#21449;&#21363;&#21487;&#20851;&#38381;&#25552;&#37266;&#12290; </div>
           </div>
           <div class="bulk-actions align-left">
-                    <select id="select-query" name="dropdown">
+             <form action="/admin/student" method="GET">
+                    <select name="op">
                       <option value="option1">&#22995;&#21517;</option>
                       <option value="option2">&#23398;&#21495;</option>
-                      <option value="option3">&#23398;&#38498;</option>
+                      <!-- <option value="option3">&#23398;&#38498;</option> -->
                     </select>
-          <input class="text-input small-input" type="text" id="small-input2" name="small-input2">
-          <a class="button" onclick="queryStudents()">&#26597;&#35810;</a>
+                    <input class="text-input small-input" type="text" id="small-input2" name="q" />
+                    <input type="submit" value="&#26597;&#35810;" >
+           </form>
           </div>
+          <div class="clear"></div>
           <table>
             <thead>
               <tr>
                 <th>
-                  <input class="check-all" type="checkbox" />
+                  序号
                 </th>
                 <th>&#23398;&#21495;</th>
                 <th>&#22995;&#21517;</th>
@@ -187,37 +149,57 @@ xmlhttp.send();
                 <th>&#31614;&#21040;&#24773;&#20917;</th>
                 <th>&#25805;&#20316;</th>
               </tr>
+              <tr class="clear"></tr>
             </thead>
             <tfoot>
               <tr>
                 <td colspan="6">
-                  <div class="bulk-actions align-left">
-                    <select name="dropdown">
-                      <option value="option1">Choose an action...</option>
-                      <option value="option2">Edit</option>
-                      <option value="option3">Delete</option>
-                    </select>
-                    <a class="button" href="#">Apply to selected</a> </div>
                   <div class="pagination"> <a href="#" title="First Page">&laquo; First</a><a href="#" title="Previous Page">&laquo; Previous</a> <a href="#" class="number" title="1">1</a> <a href="#" class="number" title="2">2</a> <a href="#" class="number current" title="3">3</a> <a href="#" class="number" title="4">4</a> <a href="#" title="Next Page">Next &raquo;</a><a href="#" title="Last Page">Last &raquo;</a> </div>
                   <!-- End .pagination -->
                   <div class="clear"></div>
                 </td>
               </tr>
             </tfoot>
+
             <tbody>
-              <div id="stuDiv"><tr>
+            {%set index = 0%}
+            {% for item in query_json %}
+            {%set index = index +1%}
+              <tr class={{ "table" + str(index)}}>
+                <td>
+                  {{index}}
+                </td>
+                <td id= {{ "uid" + str(index)}}>{{ item["UID"]}}</td>
+                <td>{{ item["CHINAME"]}}</td>
+                <td id={{ "dt" + str(index)}}>{{ item["DETECTTIME"]}}</td>
+                  {% if item["STATUS"]==1 %}
+                          <td>成功</td>
+                  {% elif item["STATUS"]==0 %}
+                          <td>未成功</td>
+                  {% else %}
+                          <td>未签到</td>
+                  {% end %}
+                  <!-- Icons -->
+                <td>
+                <a href="#" onclick="EditFunction({{index}},1)" title="Edit" value={{str(index)}}><img src="{{static_url("images/icons/pencil.png")}}" title="修改" alt="Edit" /></a>
+                <a href="#" onclick="EditFunction({{index}},2)" title="Reset" value={{str(index)}}><img src="{{static_url("images/icons/hammer_screwdriver.png")}}" title="重置" alt="Reset" /></a>
+                <a href="#" onclick="EditFunction({{index}},3)" title="Delete" value={{str(index)}}><img src="{{static_url("images/icons/cross.png")}}" title="删除"alt="Delete" /></a></td>
+              </tr>
+              {% end %}
+              <tr>
                 <td>
                   <input type="checkbox" />
                 </td>
-                <td></td>
-                <td></a></td>
-                <td></td>
-                <td></td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
                 <td>
                   <!-- Icons -->
-                  <a href="#" title="Edit"><img src="{{static_url("images/icons/pencil.png")}}" title="修改" alt="Edit" /></a>
-                  <a href="#" title="Delete"><img src="{{static_url("images/icons/cross.png")}}" title="删除"alt="Delete" /></a></td>
-              </tr> </div> 
+                  <a onclick="EditFunction()" title="Edit"><img src="{{static_url("images/icons/pencil.png")}}" title="修改" alt="Edit" /></a>
+                  <a onclick="ResetFunction()" title="Reset"><img src="{{static_url("images/icons/hammer_screwdriver.png")}}" title="重置" alt="Reset" /></a>
+                  <a onclick="DeleteFunction()" title="Delete"><img src="{{static_url("images/icons/cross.png")}}" title="删除"alt="Delete" /></a></td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -281,13 +263,15 @@ xmlhttp.send();
     <!-- End .content-box -->
     <div class="content-box column-left">
       <div class="content-box-header">
-        <h3>Content box left</h3>
+        <h3>使用说明</h3>
       </div>
       <!-- End .content-box-header -->
       <div class="content-box-content">
         <div class="tab-content default-tab">
-          <h4>Maecenas dignissim</h4>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in porta lectus. Maecenas dignissim enim quis ipsum mattis aliquet. Maecenas id velit et elit gravida bibendum. Duis nec rutrum lorem. Donec egestas metus a risus euismod ultricies. Maecenas lacinia orci at neque commodo commodo. </p>
+          <h4>使用说明</h4>
+          <p>修改按钮可以将用户的签到情况信息进行修改<br>
+            删除按钮可以将用户的这次签到记录进行删除<br>
+            重置按钮可以将用户的所有注册信息进行重置</p>
         </div>
         <!-- End #tab3 -->
       </div>
@@ -303,28 +287,15 @@ xmlhttp.send();
       <div class="content-box-content">
         <div class="tab-content default-tab">
           <h4>This box is closed by default</h4>
-          <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in porta lectus. Maecenas dignissim enim quis ipsum mattis aliquet. Maecenas id velit et elit gravida bibendum. Duis nec rutrum lorem. Donec egestas metus a risus euismod ultricies. Maecenas lacinia orci at neque commodo commodo. </p>
-        </div>
+          <p>修改按钮可以将用户的签到情况信息进行修改<br>
+            删除按钮可以将用户的这次签到记录进行删除<br>
+            重置按钮可以将用户的所有注册信息进行重置</p>        </div>
         <!-- End #tab3 -->
       </div>
       <!-- End .content-box-content -->
     </div>
     <!-- End .content-box -->
     <div class="clear"></div>
-    <!-- Start Notifications -->
-    <div class="notification attention png_bg"> <a href="#" class="close"><img src="{{static_url("images/icons/cross_grey_small.png")}}" title="Close this notification" alt="close" /></a>
-      <div> Attention notification. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vulputate, sapien quis fermentum luctus, libero. </div>
-    </div>
-    <div class="notification information png_bg"> <a href="#" class="close"><img src="{{static_url("images/icons/cross_grey_small.png")}}" title="Close this notification" alt="close" /></a>
-      <div> Information notification. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vulputate, sapien quis fermentum luctus, libero. </div>
-    </div>
-    <div class="notification success png_bg"> <a href="#" class="close"><img src="{{static_url("images/icons/cross_grey_small.png")}}" title="Close this notification" alt="close" /></a>
-      <div> Success notification. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vulputate, sapien quis fermentum luctus, libero. </div>
-    </div>
-    <div class="notification error png_bg"> <a href="#" class="close"><img src="{{static_url("images/icons/cross_grey_small.png")}}" title="Close this notification" alt="close" /></a>
-      <div> Error notification. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vulputate, sapien quis fermentum luctus, libero. </div>
-    </div>
-    <!-- End Notifications -->
     <div id="footer"> <small>
       <!-- Remove this notice or replace it with whatever you want -->
       &#169; Copyright 2012 SJTU | Powered by <a href="#">SweenEy</a></small> </div>

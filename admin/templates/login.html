@@ -25,26 +25,23 @@
   <div id="login-top">
     <h1>管理员登陆</h1>
     <!-- Logo (221px width) -->
-    <a href="http://www.865171.cn"><img id="logo" src="{{static_url("images/logo.png")}}" alt="Simpla Admin logo" /></a> </div>
+    <img id="logo" src="{{static_url("images/logo.png")}}" alt="Simpla Admin logo" />
+  </div>
   <!-- End #logn-top -->
   <div id="login-content">
-    <form action="/admin">
+    <form action="/admin" method="POST">
       <div class="notification information png_bg">
         <div> {{notification}} </div>
       </div>
       <p>
         <label>用户名</label>
-        <input class="text-input" type="text" />
+        <input class="text-input" name="username" type="text" />
       </p>
       <div class="clear"></div>
       <p>
         <label>密码</label>
-        <input class="text-input" type="password" />
+        <input class="text-input" name="password" type="password" />
       </p>
-      <div class="clear"></div>
-      <p id="remember-password">
-        <input type="checkbox"/> 记住我
-        </p>
       <div class="clear"></div>
       <div class="notification png_bg">
         <a href="/admin/jalogin">Jaccount登陆</a>
