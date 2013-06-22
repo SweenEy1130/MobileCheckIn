@@ -44,6 +44,7 @@ class adminHandler(BaseHandler):
 		self.set_cookie('login','1')
 		self.redirect('/admin')
 
+from settings import port,domain
 """Admin Jaccount Login Page
 http://domain:port/admin/jalogin
 """
@@ -52,7 +53,7 @@ class AdminJaLoginHandler(BaseHandler):
 		if not self.get_arguments('jatkt'):
 			siteID = 'jasignin20130507'
 			uaBaseURL="http://jaccount.sjtu.edu.cn/jaccount/"
-			returl = 'http://127.0.0.1:8000/admin/jalogin'
+			returl = 'http://'+domain+':'+str(port)+'/admin/jalogin'
 			iv = string.join(random.sample('1234567890abcdef',8),'')
 			# print "iv:" , iv
 			self.set_secure_cookie('iv' , iv , None)
@@ -102,7 +103,7 @@ class AdminJaLogoutHandler(BaseHandler):
 		if self.get_secure_cookie('iv'):
 			siteID = 'jasignin20130507'
 			uaBaseURL="http://jaccount.sjtu.edu.cn/jaccount/"
-			returl = 'http://127.0.0.1:8000/admin'
+			returl = 'http://'+domain+':'+str(port)+'/admin'
 			iv = self.get_secure_cookie('iv')
 			redirectURL =  uaBaseURL + "ulogout?sid="+siteID+"&returl="+encrypt(returl,iv)
 			self.clear_all_cookies()
@@ -231,6 +232,8 @@ class RuleHandler(BaseHandler):
 			info=[]
 			start=""
 			terminal=""
+			startime=""
+			termtime=""
 			if self.get_argument('start',None) and self.get_argument('terminal',None):
 				start=self.get_argument('start',None)
 				terminal=self.get_argument('terminal',None)
@@ -238,8 +241,9 @@ class RuleHandler(BaseHandler):
 			chiname = self.get_secure_cookie("chiname")
 			sql = "SELECT STARTTIME,TERMITIME FROM LOCATION WHERE LOCATIONNAME = 'SJTU';"
 			default = self.db.query(sql)
-			startime = default[0]["STARTTIME"]
-			termtime = default[0]["TERMITIME"]
+			if default:
+				startime = default[0]["STARTTIME"]
+				termtime = default[0]["TERMITIME"]
 			self.render("admin_rule.html", chiname=chiname ,\
 							startime=startime,termtime=termtime ,\
 							 date1=start,date2=terminal)

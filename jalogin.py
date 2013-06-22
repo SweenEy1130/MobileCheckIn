@@ -6,6 +6,9 @@
 #      0. You just DO WHAT THE FUCK YOU WANT TO.
 from basic import BaseHandler
 from datetime import *
+from settings import port,domain
+import random,string,json
+from jaccount import encrypt , decrypt , find , splitdata
 
 """用户JACCOUNT LOGIN
 API:    http://localhost:port/jalogin
@@ -13,11 +16,11 @@ RESPONSE:{  "error":0}
 """
 class JaLoginHandler(BaseHandler):
     def get(self):
-        print "JaLogin"
+        # print "JaLogin"
         if not self.get_arguments('jatkt'):
             siteID = 'jasignin20130507'
             uaBaseURL="http://jaccount.sjtu.edu.cn/jaccount/"
-            returl = 'http://192.168.1.20:8000/login'
+            returl = 'http://'+domain+':'+str(port)+'/jalogin'
             iv = string.join(random.sample('1234567890abcdef',8),'')
             # print "iv:" , iv
             self.set_secure_cookie('iv' , iv , None)
@@ -34,16 +37,16 @@ class JaLoginHandler(BaseHandler):
             data = decrypt(jatkt,iv)
             data = find(data,ur'ja[\s\S]*')
             data.decode('utf-8').encode('gbk')
-            ProfileData = splitdata(data)
-            # print data.decode('utf-8').encode('gbk')
+            ProfileData = splitdata(data.decode('utf-8'))
+            # print data.decode('utf-8')
             if ProfileData['ja3rdpartySessionID'] != iv:
                 self.write({"error":1})
                 return
-            if not self.update_user(ProfileData):
-                self.set_secure_cookie('uid' , ProfileData['uid'] , None)
-                self.set_cookie('chiname' , ProfileData['chinesename'] , None)
-                self.write({"error":0})
-                return
+            self.update_user(ProfileData)
+            self.set_secure_cookie('uid' , ProfileData['uid'] , None)
+            self.set_cookie('chiname' , ProfileData['chinesename'] , None)
+            self.write({"error":0})
+            return
 
     def update_user(self , profile):
         uid = profile['id']
@@ -52,19 +55,20 @@ class JaLoginHandler(BaseHandler):
         chiname = profile['chinesename']
         username = profile['uid']
         dept = profile['dept']
+	print info
         if not info:
-            sql = "INSERT INTO USER(UID,USERNAME,CHINAME,DEPARTMENT,LOCID,CREATETIME)\
+		sql = "INSERT INTO USER(UID,USERNAME,CHINAME,DEPARTMENT,LOCID,CREATETIME)\
                 VALUES(%s,\'%s\',\'%s\',\'%s\',1,\'%s\')" % (uid,username,chiname,dept,now)
-            res = self.db.execute(sql)
-            return res
+		res = self.db.execute(sql)
+		print res
         else:
             info=info[0]
             if (not info['LOCID']) or (not info['DEPARTMENT']) or(not info['CHINAME']):
                 sql="UPDATE USER SET USERNAME=\'%s\',LOCID=1,DEPARTMENT=\'%s\',CHINAME=\'%s\' WHERE UID=%s;" %\
                     (username,dept,chiname,uid)
                 res=self.db.execute(sql)
-                return res
-        return 1
+		print res
+
 """用户JACCOUNT LOGOUT
 API:    http://localhost:port/jalogout
 RESPONSE:{  "error":0}
@@ -74,12 +78,11 @@ class JaLogoutHandler(BaseHandler):
         if self.current_user:
             siteID = 'jasignin20130507'
             uaBaseURL="http://jaccount.sjtu.edu.cn/jaccount/"
-            returl = 'http://192.168.1.20:8000'
+            returl = 'http://'+domain+':'+str(port)
             iv = self.get_secure_cookie('iv')
             redirectURL =  uaBaseURL + "ulogout?sid="+siteID+"&returl="+encrypt(returl,iv)
             self.clear_all_cookies()
             self.redirect(redirectURL)
-            self.write({"error":0})
             return
         else:
             self.write({"error":1})

@@ -75,7 +75,7 @@ class Application(tornado.web.Application):
 			debug = True,
 		)
 		tornado.web.Application.__init__(self , handlers , **settings)
-		self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = 'root' , password = '')
+		self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = 'root' , password = 'sjtu2012')
 
 if __name__ == "__main__":
 	print "Welcome to Mobile Checkin Server"
