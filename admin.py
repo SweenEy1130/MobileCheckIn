@@ -380,7 +380,7 @@ class MapQueryHandler(BaseHandler):
 		terminal = self.date2time(terminal ,' 23:59:59')
 		sql='SELECT U.CHINAME,D.LONGITUDE,D.LATITUDE \
 		 		FROM USER U, DETECT D WHERE U.UID = D.OWNER AND \
-		 			D.DETECTTIME <= \'%s\' AND D.DETECTTIME >=\'%s\' AND D.STATUS=1;' % (terminal,start)
+		 			D.DETECTTIME <= \'%s\' AND D.DETECTTIME >=\'%s\' AND D.STATUS=0;' % (terminal,start)
 		info = self.db.query(sql)
 		return info
 
@@ -417,7 +417,7 @@ class TimeQueryHandler(BaseHandler):
 				sql="SELECT DATE_FORMAT(D.DETECTTIME,\'%%H\') TIMES,\
 					COUNT(*) NUMS FROM DETECT D,LOCATION L WHERE \
 					D.DETECTTIME>=L.STARTTIME AND D.DETECTTIME<=L.TERMITIME\
-					AND L.LOCID=1 AND D.STATUS=1 GROUP BY TIMES;"
+					AND L.LOCID=1 AND D.STATUS=0 GROUP BY TIMES;"
 				info = self.db.query(sql)
 				self.write(json.dumps(info))
 			elif (op=="2"):
