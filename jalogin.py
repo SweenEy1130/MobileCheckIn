@@ -1,5 +1,16 @@
 # coding=gbk
+# $File: jalogin.py
+# $Date: Sat Jun 22 13:45:27 2013 +0800
+# $Author: ronnie.alonso@gmail.com
+#
+#      0. You just DO WHAT THE FUCK YOU WANT TO.
 from basic import BaseHandler
+from datetime import *
+
+"""用户JACCOUNT LOGIN
+API:    http://localhost:port/jalogin
+RESPONSE:{  "error":0}
+"""
 class JaLoginHandler(BaseHandler):
     def get(self):
         print "JaLogin"
@@ -24,13 +35,40 @@ class JaLoginHandler(BaseHandler):
             data = find(data,ur'ja[\s\S]*')
             data.decode('utf-8').encode('gbk')
             ProfileData = splitdata(data)
-            print data.decode('utf-8').encode('gbk')
-            self.set_secure_cookie('uid' , ProfileData['uid'] , None)
-            self.set_secure_cookie('sessionid' , ProfileData['ja3rdpartySessionID'] , None)
+            # print data.decode('utf-8').encode('gbk')
             if ProfileData['ja3rdpartySessionID'] != iv:
-                self.write(self.write({"error":1}))
-            self.write({"error":0})
+                self.write({"error":1})
+                return
+            if not self.update_user(ProfileData):
+                self.set_secure_cookie('uid' , ProfileData['uid'] , None)
+                self.set_cookie('chiname' , ProfileData['chinesename'] , None)
+                self.write({"error":0})
+                return
 
+    def update_user(self , profile):
+        uid = profile['id']
+        info = self.db.query('SELECT UID,LOCID,DEPARTMENT,CHINAME FROM USER WHERE UID = %s;' % (uid))
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        chiname = profile['chinesename']
+        username = profile['uid']
+        dept = profile['dept']
+        if not info:
+            sql = "INSERT INTO USER(UID,USERNAME,CHINAME,DEPARTMENT,LOCID,CREATETIME)\
+                VALUES(%s,\'%s\',\'%s\',\'%s\',1,\'%s\')" % (uid,username,chiname,dept,now)
+            res = self.db.execute(sql)
+            return res
+        else:
+            info=info[0]
+            if (not info['LOCID']) or (not info['DEPARTMENT']) or(not info['CHINAME']):
+                sql="UPDATE USER SET USERNAME=\'%s\',LOCID=1,DEPARTMENT=\'%s\',CHINAME=\'%s\' WHERE UID=%s;" %\
+                    (username,dept,chiname,uid)
+                res=self.db.execute(sql)
+                return res
+        return 1
+"""用户JACCOUNT LOGOUT
+API:    http://localhost:port/jalogout
+RESPONSE:{  "error":0}
+"""            
 class JaLogoutHandler(BaseHandler):
     def get(self):
         if self.current_user:
@@ -41,5 +79,8 @@ class JaLogoutHandler(BaseHandler):
             redirectURL =  uaBaseURL + "ulogout?sid="+siteID+"&returl="+encrypt(returl,iv)
             self.clear_all_cookies()
             self.redirect(redirectURL)
+            self.write({"error":0})
+            return
         else:
-            self.redirect(self.write({"error":1}))
+            self.write({"error":1})
+            return

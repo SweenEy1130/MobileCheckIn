@@ -13,7 +13,9 @@ class BaseHandler(tornado.web.RequestHandler):
 	def db(self):
 		return self.application.db
 
-# main admin page
+"""Admin Main Page
+http://domain:port/admin
+"""
 class adminHandler(BaseHandler):
 	def get(self):
 		if not self.current_user:
@@ -41,9 +43,11 @@ class adminHandler(BaseHandler):
 				return
 		self.set_cookie('login','1')
 		self.redirect('/admin')
-		
-# jaccount login
-class JaLoginHandler(BaseHandler):
+
+"""Admin Jaccount Login Page
+http://domain:port/admin/jalogin
+"""
+class AdminJaLoginHandler(BaseHandler):
 	def get(self):
 		if not self.get_arguments('jatkt'):
 			siteID = 'jasignin20130507'
@@ -88,10 +92,12 @@ class JaLoginHandler(BaseHandler):
 				res = self.db.execute(sql)
 			return 1
 		else:
-			return 0	
+			return 0
 
-# jaccount logout
-class JaLogoutHandler(BaseHandler):
+"""Admin Jaccount Logout Page
+http://domain:port/admin/jalogout
+"""
+class AdminJaLogoutHandler(BaseHandler):
 	def get(self):
 		if self.get_secure_cookie('iv'):
 			siteID = 'jasignin20130507'
@@ -104,11 +110,13 @@ class JaLogoutHandler(BaseHandler):
 		self.clear_all_cookies()
 		self.redirect('/admin')
 
-# Student information query
+"""Student Information Page
+http://domain:port//admin/student
+"""
 class StudentHandler(BaseHandler):
 	def get(self):
 		if not self.current_user:
-			self.redirect("/admin/jalogin")
+			self.redirect("/admin")
 		else:
 			info=[]
 			q=""
@@ -143,6 +151,9 @@ class StudentHandler(BaseHandler):
 		else:
 			raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
 
+"""Student Information Edit API
+http://domain:port/admin/student/edit?uid=...&dt=...&op=...
+"""
 class StudentEditHandler(BaseHandler):
 	def get(self):
 		if not self.current_user:
@@ -174,6 +185,9 @@ class StudentEditHandler(BaseHandler):
 				self.write("-1")
 
 from datetime import datetime
+"""Show Detect Status Page
+http://domain:port/admin/checkin
+"""
 class CheckHandler(BaseHandler):
 	def get(self):
 		if not self.current_user:
@@ -206,7 +220,9 @@ class CheckHandler(BaseHandler):
 		date = date + miniute
 		return date
 
-# set checkin time
+"""Set Checkin Time Rule Page
+http://domain:port/admin/rule
+"""
 class RuleHandler(BaseHandler):
 	def get(self):
 		if not self.current_user:
@@ -243,7 +259,9 @@ class RuleHandler(BaseHandler):
 		date = date + miniute
 		return date
 
-# add administrator
+"""Set Administrator List Page
+http://domain:port/admin/manage
+"""
 class ManageHandler(BaseHandler):
 	def get(self):
 		if not self.current_user:
@@ -273,7 +291,9 @@ class ManageHandler(BaseHandler):
 			return 0
 		return -1
 
-# delete admin
+"""Delete Administrator API
+http://domain:port/admin/manage/delete?uid=...
+"""
 class DeleteAdminHandler(BaseHandler):
 	def get(self):
 		if not self.current_user:
@@ -287,7 +307,9 @@ class DeleteAdminHandler(BaseHandler):
 			else:
 				self.write('1')
 
-# set password
+"""Reset Administrator Password Page
+http://domain:port/admin/manage/setting
+"""
 class SettingHandler(BaseHandler):
 	def get(self):
 		if not self.current_user:
@@ -313,7 +335,9 @@ class SettingHandler(BaseHandler):
 		res = self.db.execute(sql)
 		return res
 
-# map statistics
+"""Map Statistics Page
+http://domain:port/admin/map_stat
+"""
 class MapHandler(BaseHandler):
 	def get(self):
 		if not self.current_user:
@@ -325,7 +349,10 @@ class MapHandler(BaseHandler):
 			self.render("admin_map.html", chiname=chiname , date1=start,date2=terminal)
 			return
 
-# get detect location result
+
+"""Map Statistics Search API
+http://domain:port/admin/map_stat/search?start=...&terminal=...
+"""
 class MapQueryHandler(BaseHandler):	
 	def get(self):
 		if not self.current_user:
@@ -357,7 +384,10 @@ class MapQueryHandler(BaseHandler):
 		date = date.strftime("%Y-%m-%d")
 		date = date + miniute
 		return date
-# time statistics
+
+"""Chart Statistics Page
+http://domain:port/admin/time_stat
+"""
 class TimeHandler(BaseHandler):
 	def get(self):
 		if not self.current_user:
@@ -369,7 +399,9 @@ class TimeHandler(BaseHandler):
 			self.render("admin_time_stat.html", chiname=chiname)
 			return
 
-# time query
+"""Chart Statistics Search API
+http://domain:port/admin/time_stat/([0-9]+)
+"""
 class TimeQueryHandler(BaseHandler):
 	def get(self,op):
 		if not self.current_user:

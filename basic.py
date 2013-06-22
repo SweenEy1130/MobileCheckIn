@@ -19,9 +19,6 @@ class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
         return self.get_secure_cookie("uid")
 
-    def get_sessionid(self):
-        return self.get_secure_cookie("sessionid")
-
     def handle_filename(self , uid , filename , loc): # loc = "img/" or "audio/"
         format = filename.rsplit('.' , 1)
         s = datetime.now()
@@ -32,6 +29,10 @@ class BaseHandler(tornado.web.RequestHandler):
         # unicode error
         return path.encode('gbk')
 
+    @property
+    def db(self):
+        return self.application.db
+
 class TestHandler(BaseHandler):
     def get(self):
         self.write("GET method")
@@ -41,7 +42,7 @@ class TestHandler(BaseHandler):
         self.write("POST method")
 
 """登陆界面
-API:    http://localhost:8000/login
+API:    http://domain:port/login
 POST:    {'name':'xxx','password':'xxx'}
 HEADER:  {  "Content-type":"application/json",
             "Accept":"text/plain",
@@ -84,12 +85,8 @@ class LoginHandler(BaseHandler):
             else: return -1
         else: return -1
 
-    @property
-    def db(self):
-        return self.application.db
-
 """用户注册
-API:    http://localhost:8000/login
+API:    http://domain:port/login
 POST   {'name':'xxx','password':'xxx'}
 HEADER {"Content-type":"application/json",
         "Accept":"text/plain",
@@ -146,13 +143,9 @@ class RegisterHandler(BaseHandler):
         uid = info[0]['UID']
         return uid
 
-    @property
-    def db(self):
-        return self.application.db
-
 """check user status
 API:    
-GET: http://localhost:8000/checkstatus
+GET: http://domain:port/checkstatus
 HEADER:  {  "Content-type":"application/json",
             "Accept":"text/plain",
             "Connection": "Keep-Alive", 
@@ -161,7 +154,7 @@ HEADER:  {  "Content-type":"application/json",
 RESPONSE:{  "error":0}
 error:  0 for success
         1 for not login
-        2 for sql error
+        2 for SQL error
 """
 class CheckStatusHandler(BaseHandler):
     def get(self):
@@ -169,22 +162,19 @@ class CheckStatusHandler(BaseHandler):
             self.write({"error":2})
             return
         uid = self.current_user
-        # try:
-        info = self.db.query('SELECT IMAGESAMPLE,AUDIOENGINE,LOCID FROM USER WHERE UID = %s;' % (uid))
-        res = info[0]
-        res['error'] = 0
-        self.write(res)
-        return
-        # except:
-        #     self.write({"error":2})
-        #     return 
-    @property
-    def db(self):
-        return self.application.db
+        try:
+            info = self.db.query('SELECT IMAGESAMPLE,AUDIOENGINE,LOCID FROM USER WHERE UID = %s;' % (uid))
+            res = info[0]
+            res['error'] = 0
+            self.write(res)
+            return
+        except:
+            self.write({"error":2})
+            return 
 
 """DetectCreate API
-API http://localhost:8000/detectcreate
-POST:   http://localhost:8000/detectcreate
+API http://domain:port/detectcreate
+POST:   http://domain:port/detectcreate
 HEADER:  {  "Accept":"application/json",
             "Connection": "Keep-Alive", 
             "Cache-Control": "no-cache" ,
@@ -215,14 +205,9 @@ class DetectCreateHandler(BaseHandler):
         self.write({"error":0})
         return
 
-    @property
-    def db(self):
-        return self.application.db
-
-
 """DetectResult API
-API http://localhost:8000/getdetectresult
-POST:   http://localhost:8000/getdetectresult
+API http://domain:port/getdetectresult
+POST:   http://domain:port/getdetectresult
 HEADER:  {  "Accept":"application/json",
             "Connection": "Keep-Alive", 
             "Cache-Control": "no-cache" ,
@@ -232,7 +217,8 @@ error:  0 for success
         1 for fail
         2 for not login
         3 for no sessionid
-        4 for SQL error
+        4 for empty SQL result
+        5 for SQL error
 """
 class DetectResultHandler(BaseHandler):
     def post(self):
@@ -242,39 +228,40 @@ class DetectResultHandler(BaseHandler):
         if (not self.get_sessionid()):
             self.write({"error":3})
             return
-        uid = int(self.current_user)
-        sessionid = int(self.get_sessionid())
-        
+        uid = self.current_user
+        sessionid = self.get_secure_cookie("sessionid")
         result = self.evaluation(uid,sessionid)
-        return
+        self.write({"error":result})
             
         
     def evaluation(self , uid , sessionid):
-        info = self.db.query('SELECT FACEDETECT,AUDIODETECT,LATITUDE,LONGITUDE FROM DETECT WHERE OWNER = %s AND SESSIONID = %d' % 
+        info = self.db.query('SELECT FACEDETECT,AUDIODETECT,LATITUDE,LONGITUDE FROM DETECT WHERE OWNER = %s AND SESSIONID = %s;' % 
             (uid , sessionid))
         if (not info):
-            self.write({"error":4})
-            return 0
+            return 4
         info = info[0]
         facedetect = info['FACEDETECT']
         audiodetect = info['AUDIODETECT']
         loc_detect = [info['LATITUDE'] , info['LONGITUDE']]
-        info = self.db.query('SELECT L.LOCATIONNAME, L.LONGITUDE, L.LATITUDE FROM LOCATION L,USER U WHERE L.LOCID = U.LOCID AND U.UID = %d' %
+        info = self.db.query('SELECT * FROM LOCATION L,USER U WHERE L.LOCID = U.LOCID AND U.UID = %s;' %
             (uid))
         if (not info):
-            self.write({"error":4})
-            return 0
+            return 4
         info = info[0]
         loc_init = [info['LATITUDE'],info['LONGITUDE']]
         loc_name = info['LOCATIONNAME']
+        starttime = info['STARTTIME']
+        termitime = info['TERMITIME']
         dis = spherical_distance(loc_detect , loc_init)
         if (dis <= 4) and (facedetect >= 70) and (audiodetet == 0):
-            self.write({"error":0})
-            return 1
+            detect_status=1
         else:
-            self.write({'error':1})
-
-    @property
-    def db(self):
-        return self.application.db
+            detect_status=0
+        try:
+            sql = "UPDATE DETECT SET STATUS=%d WHERE OWNER = %s AND SESSIONID = %s;"\
+             % (detect_status,uid,sessionid)
+            info=self.db.execute(sql)
+        except:
+            return 5
+        return detect_status
 
