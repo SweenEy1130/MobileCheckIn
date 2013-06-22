@@ -21,6 +21,7 @@ import tornado.options
 import logging
 import os
 
+from jalogin import JaLoginHandler,JaLogoutHandler
 from basic import LoginHandler , RegisterHandler , DetectCreateHandler , DetectResultHandler , CheckStatusHandler
 from face import FaceppHandler , FaceRegisterHandler
 from sv import SpeechTrainHandler,SpeechDetectHandler
@@ -33,7 +34,8 @@ class Application(tornado.web.Application):
 	def __init__(self):
 		handlers = [
 			# (r"/test", TestHandler),
-			(r"/login", LoginHandler),
+			(r"/login", JaLoginHandler),
+			(r"/logout",JaLogoutHandler),
 			(r"/register", RegisterHandler),
 			(r"/faceverify" , FaceppHandler),
 			(r"/faceregister" , FaceRegisterHandler),

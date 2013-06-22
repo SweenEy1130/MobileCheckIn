@@ -1,6 +1,6 @@
 # coding=utf-8
 import tornado.ioloop,tornado.web,tornado.httpserver,tornado.database,tornado.options
-from admin import SettingHandler,DeleteAdminHandler,ManageHandler,RuleHandler,adminHandler,JaLoginHandler,JaLogoutHandler, StudentHandler, StudentEditHandler,CheckHandler
+from admin import TimeQueryHandler,TimeHandler,MapQueryHandler,MapHandler,SettingHandler,DeleteAdminHandler,ManageHandler,RuleHandler,adminHandler,JaLoginHandler,JaLogoutHandler, StudentHandler, StudentEditHandler,CheckHandler
 import os
 from tornado.options import define,options
 define("port", default=8000, help="run on the given port", type=int)
@@ -13,11 +13,15 @@ class Application(tornado.web.Application):
 			(r"/admin/logout" , JaLogoutHandler),
 			(r"/admin/student", StudentHandler),
 			(r"/admin/student/edit", StudentEditHandler),
-			(r"/admin/checkin", CheckHandler),
+			(r"/admin/checkin",CheckHandler),
 			(r"/admin/rule", RuleHandler),
 			(r"/admin/manage", ManageHandler),
 			(r"/admin/manage/delete", DeleteAdminHandler),
 			(r"/admin/setting", SettingHandler),
+			(r"/admin/map_stat", MapHandler),
+			(r"/admin/map_stat/search", MapQueryHandler),
+			(r"/admin/time_stat", TimeHandler),
+			(r"/admin/time_stat/([0-9]+)", TimeQueryHandler),
 		]
 		settings = dict(
 			debug = True,

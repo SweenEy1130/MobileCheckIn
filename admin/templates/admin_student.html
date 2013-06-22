@@ -16,12 +16,9 @@
 <!-- jQuery Configuration -->
 <script type="text/javascript" src="{{static_url("scripts/simpla.jquery.configuration.js")}}"></script>
 <!-- Facebox jQuery Plugin -->
-<script type="text/javascript" src="{{static_url("scripts/facebox.js")}}"></script>
+<!-- <script type="text/javascript" src="{{static_url("scripts/facebox.js")}}"></script> -->
 <!-- jQuery WYSIWYG Plugin -->
 <script type="text/javascript" src="{{static_url("scripts/jquery.wysiwyg.js")}}"></script>
-<!-- jQuery Datepicker Plugin -->
-<script type="text/javascript" src="{{static_url("scripts/jquery.datePicker.js")}}"></script>
-<script type="text/javascript" src="{{static_url("scripts/jquery.date.js")}}"></script>
 <script type="text/javascript">
 function ischeckNum()
 {
@@ -70,10 +67,8 @@ function EditFunction(index,op){
       xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
       }
 
-    xmlhttp.onreadystatechange=function()
-      {
-      if (xmlhttp.readyState==4 && xmlhttp.status==200)
-        {
+    xmlhttp.onreadystatechange=function(){
+      if (xmlhttp.readyState==4 && xmlhttp.status==200){
         var resTex=xmlhttp.responseText;
         if (resTex=='0' && op==3){
            var str=".table" + index;
@@ -81,9 +76,11 @@ function EditFunction(index,op){
           }
         else if(resTex=='0' && op==2){
           alert("用户信息已重置！");
-        }
+        }else if(resTex=='0' && op==1){
+          alert("已经修改为成功签到！请手动刷新页面！");
         }
       }
+    }
     url="/admin/student/edit?uid="+ uid + "&op="+ op+"&dt="+dt;
     xmlhttp.open("GET",url,true);
     xmlhttp.send();
@@ -124,8 +121,8 @@ function EditFunction(index,op){
         </li>
         <li> <a href="#" class="nav-top-item"> &#32479;&#35745;&#20449;&#24687;</a>
           <ul>
-            <li><a href="/admin/time_static">&#31614;&#21040;&#26102;&#38388;&#32479;&#35745;</a></li>
-            <li><a href="/admin/map_static">&#31614;&#21040;&#20301;&#32622;&#32479;&#35745;</a></li>
+            <li><a href="/admin/time_stat">&#31614;&#21040;&#26102;&#38388;&#32479;&#35745;</a></li>
+            <li><a href="/admin/map_stat">&#31614;&#21040;&#20301;&#32622;&#32479;&#35745;</a></li>
        </ul>
         </li>
         <li> <a href="#" class="nav-top-item"> &#35774;&#32622;</a>
@@ -183,11 +180,6 @@ function EditFunction(index,op){
       <!-- Start Content Box -->
       <div class="content-box-header">
         <h3>&#23398;&#29983;&#20449;&#24687;&#26597;&#35810;</h3>
-        <ul class="content-box-tabs">
-          <li><a href="#tab1" class="default-tab">查询学生情况</a></li>
-          <!-- href must be unique and match the id of target div -->
-          <li><a href="#tab2">&#20869;&#23481;</a></li>
-        </ul>
         <div class="clear"></div>
       </div>
       <!-- End .content-box-header -->
@@ -275,101 +267,13 @@ function EditFunction(index,op){
           </table>
         </div>
         <!-- End #tab1 -->
-        <div class="tab-content" id="tab2">
-          <form action="#" method="post">
-            <fieldset>
-            <!-- Set class to "column-left" or "column-right" on fieldsets to divide the form into columns -->
-            <p>
-              <label>Small form input</label>
-              <input class="text-input small-input" type="text" id="small-input" name="small-input" />
-              <span class="input-notification success png_bg">Successful message</span>
-              <!-- Classes for input-notification: success, error, information, attention -->
-              <br />
-              <small>A small description of the field</small> </p>
-            <p>
-              <label>Medium form input</label>
-              <input class="text-input medium-input datepicker" type="text" id="medium-input" name="medium-input" />
-              <span class="input-notification error png_bg">Error message</span> </p>
-            <p>
-              <label>Large form input</label>
-              <input class="text-input large-input" type="text" id="large-input" name="large-input" />
-            </p>
-            <p>
-              <label>Checkboxes</label>
-              <input type="checkbox" name="checkbox1" />
-              This is a checkbox
-              <input type="checkbox" name="checkbox2" />
-              And this is another checkbox </p>
-            <p>
-              <label>Radio buttons</label>
-              <input type="radio" name="radio1" />
-              This is a radio button<br />
-              <input type="radio" name="radio2" />
-              This is another radio button </p>
-            <p>
-              <label>This is a drop down list</label>
-              <select name="dropdown" class="small-input">
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
-                <option value="option4">Option 4</option>
-              </select>
-            </p>
-            <p>
-              <label>Textarea with WYSIWYG</label>
-              <textarea class="text-input textarea wysiwyg" id="textarea" name="textfield" cols="79" rows="15"></textarea>
-            </p>
-            <p>
-              <input class="button" type="submit" value="Submit" />
-            </p>
-            </fieldset>
-            <div class="clear"></div>
-            <!-- End .clear -->
-          </form>
-        </div>
-        <!-- End #tab2 -->
       </div>
       <!-- End .content-box-content -->
     </div>
-    <!-- End .content-box -->
-    <div class="content-box column-left">
-      <div class="content-box-header">
-        <h3>使用说明</h3>
-      </div>
-      <!-- End .content-box-header -->
-      <div class="content-box-content">
-        <div class="tab-content default-tab">
-          <h4>使用说明</h4>
-          <p>修改按钮可以将用户的签到情况信息进行修改<br>
-            删除按钮可以将用户的这次签到记录进行删除<br>
-            重置按钮可以将用户的所有注册信息进行重置</p>
-        </div>
-        <!-- End #tab3 -->
-      </div>
-      <!-- End .content-box-content -->
-    </div>
-    <!-- End .content-box -->
-    <div class="content-box column-right closed-box">
-      <div class="content-box-header">
-        <!-- Add the class "closed" to the Content box header to have it closed by default -->
-        <h3>Content box right</h3>
-      </div>
-      <!-- End .content-box-header -->
-      <div class="content-box-content">
-        <div class="tab-content default-tab">
-          <h4>This box is closed by default</h4>
-          <p>修改按钮可以将用户的签到情况信息进行修改<br>
-            删除按钮可以将用户的这次签到记录进行删除<br>
-            重置按钮可以将用户的所有注册信息进行重置</p>        </div>
-        <!-- End #tab3 -->
-      </div>
-      <!-- End .content-box-content -->
-    </div>
-    <!-- End .content-box -->
     <div class="clear"></div>
     <div id="footer"> <small>
       <!-- Remove this notice or replace it with whatever you want -->
-      &#169; Copyright 2012 SJTU | Powered by <a href="#">SweenEy</a></small> </div>
+      &#169; Copyright 2013 SJTU | Powered by <a href="#">SweenEy</a></small> </div>
     <!-- End #footer -->
   </div>
   <!-- End #main-content -->

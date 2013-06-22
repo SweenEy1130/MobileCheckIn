@@ -154,7 +154,10 @@ class StudentEditHandler(BaseHandler):
 				dt=self.get_argument('dt',None)
 				op=self.get_argument('op',None)
 				if(op == '1'):
-					pass
+					sql = 'UPDATE DETECT SET STATUS=1 WHERE\
+					 OWNER=%s AND DETECTTIME=\'%s\';' % (uid,dt)
+					info = self.db.execute(sql)
+					self.write("0")
 				elif(op == '2'):
 					sql = 'UPDATE USER SET IMAGESAMPLE=NULL, \
 								LOCID=NULL, AUDIOENGINE=NULL WHERE \
@@ -167,9 +170,8 @@ class StudentEditHandler(BaseHandler):
 					self.write("0")
 				else:
 					self.write("-1")
-					return
 			else:
-				return
+				self.write("-1")
 
 from datetime import datetime
 class CheckHandler(BaseHandler):
@@ -310,3 +312,82 @@ class SettingHandler(BaseHandler):
 					% (psw,uid)
 		res = self.db.execute(sql)
 		return res
+
+# map statistics
+class MapHandler(BaseHandler):
+	def get(self):
+		if not self.current_user:
+			self.redirect("/admin")
+		else:
+			start=""
+			terminal=""
+			chiname = self.get_secure_cookie("chiname")
+			self.render("admin_map.html", chiname=chiname , date1=start,date2=terminal)
+			return
+
+# get detect location result
+class MapQueryHandler(BaseHandler):	
+	def get(self):
+		if not self.current_user:
+			self.write({"error":-1})
+		else:
+			info=[]
+			start=""
+			terminal=""
+			if self.get_argument('start',None) and self.get_argument('terminal',None):
+				start=self.get_argument('start',None)
+				terminal=self.get_argument('terminal',None)
+				info = self.query(start,terminal)
+		info = json.dumps(info)
+		# print info		
+		self.write(info)
+
+	def query(self,start,terminal):
+		start = self.date2time(start," 00:00:00")
+		terminal = self.date2time(terminal ,' 23:59:59')
+		sql='SELECT U.CHINAME,D.LONGITUDE,D.LATITUDE \
+		 		FROM USER U, DETECT D WHERE U.UID = D.OWNER AND \
+		 			D.DETECTTIME <= \'%s\' AND D.DETECTTIME >=\'%s\';' % (terminal,start)
+		info = self.db.query(sql)
+		return info
+
+	def date2time(self,date,miniute):
+		date = date.replace('/','-')
+		date = datetime.strptime(date, "%m-%d-%Y")
+		date = date.strftime("%Y-%m-%d")
+		date = date + miniute
+		return date
+# time statistics
+class TimeHandler(BaseHandler):
+	def get(self):
+		if not self.current_user:
+			self.redirect("/admin")
+		else:
+			start=""
+			terminal=""
+			chiname = self.get_secure_cookie("chiname")
+			self.render("admin_time_stat.html", chiname=chiname)
+			return
+
+# time query
+class TimeQueryHandler(BaseHandler):
+	def get(self,op):
+		if not self.current_user:
+			self.redirect("/admin")
+		else:
+			if (op=="1"):
+				sql="SELECT DATE_FORMAT(D.DETECTTIME,\'%%H\') TIMES,\
+					COUNT(*) NUMS FROM DETECT D,LOCATION L WHERE \
+					D.DETECTTIME>=L.STARTTIME AND D.DETECTTIME<=L.TERMITIME\
+					AND L.LOCID=1 AND D.STATUS=1 GROUP BY TIMES;"
+				info = self.db.query(sql)
+				self.write(json.dumps(info))
+			elif (op=="2"):
+				sql="SELECT DATE_FORMAT(D.DETECTTIME,\'%%m\') TIMES,\
+					COUNT(*) NUMS FROM DETECT D,LOCATION L WHERE \
+					D.DETECTTIME>=L.STARTTIME AND D.DETECTTIME<=L.TERMITIME\
+					AND L.LOCID=1 AND D.STATUS=1 GROUP BY TIMES;"
+				info = self.db.query(sql)
+				self.write(json.dumps(info))
+			else:
+				self.write('-1')

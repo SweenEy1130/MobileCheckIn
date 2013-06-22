@@ -339,7 +339,26 @@ ul.content-box-tabs li a.current {
                 font-size: 13px;
                 border-top: 1px solid #ccc;
                 }
-                
+/************ Map ************/            
+#map{
+                display: block;
+                width: 90%;
+                height: 500px;
+                margin: 0 auto;
+                -moz-box-shadow: 0px 5px 20px #ccc;
+                -webkit-box-shadow: 0px 5px 20px #ccc;
+                box-shadow: 0px 5px 20px #ccc;
+}
+/************ Statistic ********/
+canvas{
+                height:300px;
+                width:45%;
+                margin: 20px;
+                -moz-box-shadow: 0px 5px 20px #ccc;
+                -webkit-box-shadow: 0px 5px 20px #ccc;
+                box-shadow: 0px 5px 20px #ccc;
+        }
+
 /************ Table ************/
 
 #main-content table {
