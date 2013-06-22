@@ -23,11 +23,6 @@
 <!-- jQuery Datepicker Plugin -->
 <script type="text/javascript" src="{{static_url("scripts/jquery.datePicker.js")}}"></script>
 <script type="text/javascript" src="{{static_url("scripts/jquery.date.js")}}"></script>
-<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-<!-- Navigation jquery -->
-<script type="text/javascript" src="{{static_url("scripts/jquery.simplePagination.js")}}"></script>
-<!-- Navigation jquery -->
 <script type="text/javascript">
 function ischeckNum()
 {
@@ -54,7 +49,6 @@ function DeleteFunction(index,op){
     var xmlhttp;
     var uid,dt,notification;
     uid=document.getElementById("uid"+index).innerHTML;
-    alert(uid)
     var r=confirm("你确定要删除该管理员吗？");
     if (r==false){return;}
     if (window.XMLHttpRequest){//e for IE7+, Firefox, Chrome, Opera, Safari
@@ -73,7 +67,7 @@ function DeleteFunction(index,op){
              $(str).fadeTo(400, 0, function(){$(this).slideUp(400);});
             }
           else {
-            alert(resTex)
+            alert("删除管理员失败！")
             return false
           }
         }

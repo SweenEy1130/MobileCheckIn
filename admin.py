@@ -108,8 +108,10 @@ class AdminJaLogoutHandler(BaseHandler):
 			redirectURL =  uaBaseURL + "ulogout?sid="+siteID+"&returl="+encrypt(returl,iv)
 			self.clear_all_cookies()
 			self.redirect(redirectURL)
+			return
 		self.clear_all_cookies()
 		self.redirect('/admin')
+		return
 
 """Student Information Page
 http://domain:port//admin/student
