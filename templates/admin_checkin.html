@@ -184,9 +184,9 @@ function isDate(){
                 <td id= {{ "uid" + str(index)}}>{{ item["UID"]}}</td>
                 <td>{{ item["CHINAME"]}}</td>
                 <td id={{ "dt" + str(index)}}>{{ item["DETECTTIME"]}}</td>
-                  {% if item["STATUS"]==1 %}
+                  {% if item["STATUS"]==0 %}
                           <td>成功</td>
-                  {% elif item["STATUS"]==0 %}
+                  {% elif item["STATUS"]==1 %}
                           <td>未成功</td>
                   {% else %}
                           <td>未签到</td>

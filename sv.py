@@ -10,6 +10,7 @@ import os,json,string
 from datetime import *
 from ctypes import cdll, c_int , c_char_p , c_double
 from basic import BaseHandler
+import select
 
 # Speech Verify Engine initialize
 sv_dll = cdll.LoadLibrary("./sv/libsv.so")
@@ -81,10 +82,6 @@ class SpeechTrainHandler(BaseHandler):
 		self.db.execute('INSERT INTO AUDIO(OWNER,AUDIOHASH,CREATETIME) VALUES(\'%s\',\'%s\',\'%s\');' % (tmp_uid , file3 ,now))
 		self.write({"error": 0})
 
-	@property
-	def db(self):
-		return self.application.db
-
 """speech detect API
 API http://localhost:8000/svdetect
 POST:	http://localhost:8000/svdetect
@@ -138,7 +135,3 @@ class SpeechDetectHandler(BaseHandler):
 		except:
 			self.write({"error": -1})
 			return
-
-	@property
-	def db(self):
-		return self.application.db

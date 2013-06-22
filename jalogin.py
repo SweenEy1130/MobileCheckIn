@@ -10,9 +10,16 @@ from settings import port,domain
 import random,string,json
 from jaccount import encrypt , decrypt , find , splitdata
 
+from facepp import API,File,APIError
+API_KEY = 'b3b9061aaf64ea2515a3538dfb624e94'
+API_SECRET = 'OfvW6DdyM9iqAa8TkBoBhoiWANX6Kn2Z'
+api = API(API_KEY, API_SECRET)
 """用户JACCOUNT LOGIN
 API:    http://localhost:port/jalogin
 RESPONSE:{  "error":0}
+0:success
+1:hacking attempt
+3:face++ person_create error
 """
 class JaLoginHandler(BaseHandler):
     def get(self):
@@ -43,7 +50,7 @@ class JaLoginHandler(BaseHandler):
                 self.write({"error":1})
                 return
             self.update_user(ProfileData)
-            self.set_secure_cookie('uid' , ProfileData['uid'] , None)
+            self.set_secure_cookie('uid' , ProfileData['id'] , None)
             self.set_cookie('chiname' , ProfileData['chinesename'] , None)
             self.write({"error":0})
             return
@@ -55,19 +62,23 @@ class JaLoginHandler(BaseHandler):
         chiname = profile['chinesename']
         username = profile['uid']
         dept = profile['dept']
-	print info
         if not info:
-		sql = "INSERT INTO USER(UID,USERNAME,CHINAME,DEPARTMENT,LOCID,CREATETIME)\
+            sql = "INSERT INTO USER(UID,USERNAME,CHINAME,DEPARTMENT,LOCID,CREATETIME)\
                 VALUES(%s,\'%s\',\'%s\',\'%s\',1,\'%s\')" % (uid,username,chiname,dept,now)
-		res = self.db.execute(sql)
-		print res
+            res = self.db.execute(sql)
+            # FACE++
+            try:
+                person_create = api.person.create(person_name = uid , group_name = u'Students')
+            except APIError,e:
+                self.write({'error':3 , 'info':json.loads(e.body)['error']})
+		# print res
         else:
             info=info[0]
             if (not info['LOCID']) or (not info['DEPARTMENT']) or(not info['CHINAME']):
                 sql="UPDATE USER SET USERNAME=\'%s\',LOCID=1,DEPARTMENT=\'%s\',CHINAME=\'%s\' WHERE UID=%s;" %\
                     (username,dept,chiname,uid)
                 res=self.db.execute(sql)
-		print res
+		# print res
 
 """用户JACCOUNT LOGOUT
 API:    http://localhost:port/jalogout

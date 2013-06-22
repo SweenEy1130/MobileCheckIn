@@ -18,6 +18,8 @@ api = API(API_KEY, API_SECRET)
 class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
         return self.get_secure_cookie("uid")
+    def get_sessionid(self):
+	return self.get_secure_cookie('sessionid')
 
     def handle_filename(self , uid , filename , loc): # loc = "img/" or "audio/"
         format = filename.rsplit('.' , 1)
@@ -163,12 +165,12 @@ class CheckStatusHandler(BaseHandler):
             return
         uid = self.current_user
         try:
-            info = self.db.query('SELECT IMAGESAMPLE,AUDIOENGINE,LOCID FROM USER WHERE UID = %s;' % (uid))
-            res = info[0]
-            res['error'] = 0
-            self.write(res)
-            return
-        except:
+        	info = self.db.query('SELECT IMAGESAMPLE,AUDIOENGINE,LOCID FROM USER WHERE UID = %s;' % (uid))
+       		res = info[0]
+        	res['error'] = 0
+        	self.write(res)
+        	return
+	except:
             self.write({"error":2})
             return 
 
@@ -253,10 +255,10 @@ class DetectResultHandler(BaseHandler):
         starttime = info['STARTTIME']
         termitime = info['TERMITIME']
         dis = spherical_distance(loc_detect , loc_init)
-        if (dis <= 4) and (facedetect >= 70) and (audiodetet == 0):
-            detect_status=1
-        else:
+        if (dis <= 4) and (facedetect >= 70) and (audiodetect == 0):
             detect_status=0
+        else:
+            detect_status=1
         try:
             sql = "UPDATE DETECT SET STATUS=%d WHERE OWNER = %s AND SESSIONID = %s;"\
              % (detect_status,uid,sessionid)

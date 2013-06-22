@@ -45,15 +45,11 @@ class UploadLocationHandler(BaseHandler):
 		except:
 			self.write({'error':2})
 			return
-		print latitude,longitude , sessionid
+		print latitude,longitude
 		self.db.execute('UPDATE DETECT SET LATITUDE=%f , LONGITUDE=%f WHERE SESSIONID = %d;' % 
 		(latitude ,longitude , sessionid))
 		self.write({'error':0})
 		return
-
-	@property
-	def db(self):
-		return self.application.db
 
 """LocationRegisterHandler API
 API http://localhost:8000/registerlocation
@@ -77,10 +73,6 @@ class LocationRegisterHandler(BaseHandler):
 
 		self.db.execute('UPDATE USER SET LOCID = %d WHERE UID = %s;' % (locid , uid))
 		self.write({'error':0})
-
-	@property
-	def db(self):
-		return self.application.db
 
 if __name__ == '__main__':
 	frompoint = [40.0351,116.40863583333334]

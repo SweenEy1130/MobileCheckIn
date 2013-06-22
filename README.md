@@ -5,15 +5,20 @@ Mobile Check In
 文件列表
 ----------------------------
 
-* api_test.py api测试文件
 * face.py 	人脸识别模块
 * facepp.py 	Face++ SDK
-* model.py 	注册、登陆模块
+* basic.py 	基本模块-验证和基本登录
 * main.py 	主程序
 * SQL.txt 	MySQL初始化语句
 * location.py	地理位置注册和验证
 * sv.py		语音注册和验证
-
+* admin.py	后台管理界面模块
+* jaccount.py	Jaccount SDK
+* jalogin.py	Jaccount登录模块
+* gps.py	运算地理距离
+* settings.py	系统设置-端口和IP
+* init.sql	MySQL初始化配置
+* config.conf	服务器配置文件
 API文档
 ----------------------------
 * 登陆界面

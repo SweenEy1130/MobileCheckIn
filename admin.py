@@ -380,7 +380,7 @@ class MapQueryHandler(BaseHandler):
 		terminal = self.date2time(terminal ,' 23:59:59')
 		sql='SELECT U.CHINAME,D.LONGITUDE,D.LATITUDE \
 		 		FROM USER U, DETECT D WHERE U.UID = D.OWNER AND \
-		 			D.DETECTTIME <= \'%s\' AND D.DETECTTIME >=\'%s\';' % (terminal,start)
+		 			D.DETECTTIME <= \'%s\' AND D.DETECTTIME >=\'%s\' AND D.STATUS=1;' % (terminal,start)
 		info = self.db.query(sql)
 		return info
 

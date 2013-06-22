@@ -44,7 +44,7 @@ class FaceppHandler(BaseHandler):
 		if not self.current_user:
 			self.write({"error":2})
 			return
-		if (not self.get_sessionid()):
+		if (not self.get_secure_cookie("sessionid")):
 			self.write({"error":4})
 			return
 		sessionid = int(self.get_sessionid())
@@ -81,9 +81,7 @@ class FaceppHandler(BaseHandler):
 		(tmp_face1 , similarity , sessionid))
 		self.write({"error":0,
 					"similarity":similarity})
-	@property
-	def db(self):
-		return self.application.db
+
 		
 """face regeister API
 API http://localhost:8000/faceregister
@@ -139,6 +137,3 @@ class FaceRegisterHandler(BaseHandler):
 		else:
 			self.write({"error":3})
 
-	@property
-	def db(self):
-		return self.application.db
