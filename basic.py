@@ -255,7 +255,7 @@ class DetectResultHandler(BaseHandler):
         starttime = info['STARTTIME']
         termitime = info['TERMITIME']
         dis = spherical_distance(loc_detect , loc_init)
-        if (dis <= 4) and (facedetect >= 70) and (audiodetect == 0):
+        if (dis <= 4) and (facedetect >= 70) and (audiodetect > 0.7):
             detect_status=0
         else:
             detect_status=1

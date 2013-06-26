@@ -1,0 +1,11 @@
+gcc AI_SV_API.c -o AI_SV -L. -lspeakerverify -m64
+gcc sv_api.c sv_api.h -shared -o libsv.so -fPIC -L. -lspeakerverify -m64
+
+安装iconv
+设置搜索路径
+vi /etc/ld.so.conf
+加入
+/usr/local/lib
+运行
+ldconfig
+

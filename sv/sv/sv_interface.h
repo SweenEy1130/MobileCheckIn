@@ -1,5 +1,5 @@
 /*
- * sv_interface.h
+ * sr_interface.h
  *
  *  Created on: Aug 22, 2012
  *      Author: fx310
@@ -21,6 +21,7 @@ void releaseSVEngineAdapt(SVEngine* engine);
 
 SVEngine* newSVEngineDetect(char* resBinFile, char** spkrModelFile, int spkrModelNum);
 int writeAudioToSVEngineDetect(SVEngine* engine, char* audio, int bytesLen, double threshold);
+double writeAudioToSVEngineDetect2(SVEngine* engine, char* audio, int bytesLen, double threshold);
 void releaseSVEngineDetect(SVEngine* engine);
 
 #ifdef __cplusplus

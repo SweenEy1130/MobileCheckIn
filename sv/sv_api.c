@@ -1,4 +1,4 @@
-#include "sv_interface.h"
+#include "sv/sv_interface.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -40,7 +40,7 @@ int SVtrain(char * sv_cfg_fn , char * sv_output_engine , char * wav_train)
 {
 	char * data;
 	long len;
-	int ret;
+	int ret=0;
 	
 	SVEngine *adapt = 0;
 	adapt = newSVEngineAdapt(sv_cfg_fn , sv_output_engine , 0);
@@ -66,7 +66,7 @@ other: return the index of voice resource
 */
 int SVdetect(char * sv_cfg_fn , char * sv_output_engine , char *wav_detect , double thresh , int res_num)
 {
-	int ret;
+	double conf=0.0;
 	char *data;
 	long len;
 	
@@ -74,10 +74,13 @@ int SVdetect(char * sv_cfg_fn , char * sv_output_engine , char *wav_detect , dou
 	detect = newSVEngineDetect(sv_cfg_fn , &sv_output_engine , res_num);
 
 	data = _file_read_buf(wav_detect , &len);
-	ret = writeAudioToSVEngineDetect(detect , data + 44 , len - 44 , thresh);
+	conf = writeAudioToSVEngineDetect2(detect , data + 44 , len - 44 , thresh);
 
+	// printf("conf:%lf\n",conf);
+	free(data);
+	
 	releaseSVEngineDetect(detect);
-	return ret;
+	return conf;
 }
 char* test(char *str , double d , int n)    
 {    
