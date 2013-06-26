@@ -6,7 +6,7 @@
 #      0. You just DO WHAT THE FUCK YOU WANT TO. 
 """
 example:
-usage:python main.py --port = 8000 --log_file_prefix = MCI@8000.log
+usage:python main.py --port = 8000 --log_file_prefix = MCI@8888.log
 """
 """		
 cookie_secret generator

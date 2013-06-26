@@ -404,32 +404,12 @@ canvas{
 /*************** Pagination ***************/
 
 #main-content .pagination {
-                text-align: right;
+                float:left;
                 padding: 20px 0 5px 0;
                 font-family: Verdana, Arial, Helvetica, sans-serif;
                 font-size: 10px;
                 }
-.pagination a {
-                margin: 0 5px 0 0;
-                padding: 3px 6px;
-                }
-
-.pagination a.number {
-				border: 1px solid #ddd;
-                }
-
-.pagination a.current {
-                background: #469400 url('../images/bg-button-green.gif') top left repeat-x !important;
-                border-color: #459300 !important;
-                color: #fff !important;
-                }
-				
-.pagination a.current:hover {
-				text-decoration: underline;
-                }
-
 /************ Shortcut Buttons ************/
-
 .shortcut-button {
                 border: 1px solid #ccc;
                 background: #f7f7f7 url('../images/shortcut-button-bg.gif') top left no-repeat;

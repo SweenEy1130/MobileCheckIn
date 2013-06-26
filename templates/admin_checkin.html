@@ -25,9 +25,7 @@
 <script type="text/javascript" src="{{static_url("scripts/jquery.date.js")}}"></script>
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-<!-- Navigation jquery -->
-<script type="text/javascript" src="{{static_url("scripts/jquery.simplePagination.js")}}"></script>
-<!-- Navigation jquery -->
+<script src="{{static_url("scripts/jquery.paginate.js")}}" type="text/javascript"></script>
 <script>
 $(function() {
   $( "#datepicker1" ).datepicker();
@@ -159,19 +157,24 @@ function isDate(){
             <tfoot>
               <tr>
                 <td colspan="6">
-                  <div class="pagination"> 
-                    <a href="#" title="First Page">&laquo; First</a>
-                    <a href="#" title="Previous Page">&laquo; Previous</a> 
-                    <a href="#" class="number" title="1">1</a> 
-                    <a href="#" class="number" title="2">2</a>
-                    <a href="#" class="number current" title="3">3</a>
-                    <a href="#" class="number" title="4">4</a>
-                    <a href="#" title="Next Page">Next &raquo;</a>
-                    <a href="#" title="Last Page">Last &raquo;</a> </div>
-                  <!-- End .pagination -->
+                  <!--<div id="jPaginate" class="pagination"></div> -->
                   <div class="clear"></div>
                 </td>
-              </tr>
+              </tr> 
+		<script type="text/javascript">
+		$(function() {
+			$("#jPaginate").paginate({
+				count 		: 50,
+				start 		: 5,
+				display     : 10,
+				border					: false,
+				text_color  			: '#888',
+				background_color    	: '#EEE',	
+				text_hover_color  		: 'black',
+				background_hover_color	: '#CFCFCF'
+			});
+		});
+		</script>
             </tfoot>
             <tbody>
             {%set index = 0%}

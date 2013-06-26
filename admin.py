@@ -424,7 +424,7 @@ class TimeQueryHandler(BaseHandler):
 				sql="SELECT DATE_FORMAT(D.DETECTTIME,\'%%m\') TIMES,\
 					COUNT(*) NUMS FROM DETECT D,LOCATION L WHERE \
 					D.DETECTTIME>=L.STARTTIME AND D.DETECTTIME<=L.TERMITIME\
-					AND L.LOCID=1 AND D.STATUS=1 GROUP BY TIMES;"
+					AND L.LOCID=1 AND D.STATUS=0 GROUP BY TIMES;"
 				info = self.db.query(sql)
 				self.write(json.dumps(info))
 			else:
