@@ -52,6 +52,14 @@ class File(object):
     def __init__(self, path):
         self.path = path
 
+class Img(object):
+    """an object representing a binary img"""
+    data = None
+    filename = None
+    def __init__(self, data,filename):
+        self.data = data
+        self.filename =filename
+
 class APIError(Exception):
     code = None
     """HTTP status code"""
@@ -151,6 +159,9 @@ class _APIProxy(object):
         form = _MultiPartForm()
         add_form = False
         for (k, v) in kargs.iteritems():
+            if isinstance(v,Img):
+                add_form = True
+                form.add_img(k,v.filename,v.data)
             if isinstance(v, File):
                 add_form = True
                 with open(v.path, 'rb') as f:
@@ -233,7 +244,14 @@ class _MultiPartForm(object):
             mimetype = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
         self.files.append((fieldname, filename, mimetype, body))
         return
-    
+
+    def add_img(self,fieldname,filename,fileBody,mimetype=None):
+        """Add a img to be uploaded."""
+        if mimetype is None:
+            mimetype = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+        self.files.append((fieldname, filename ,mimetype, fileBody))
+        return
+
     def __str__(self):
         """Return a string representing the form data, including attached files."""
         # Build a list of lists, each containing "lines" of the

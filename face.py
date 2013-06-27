@@ -9,7 +9,7 @@ import tornado.httpclient
 import os,json,string
 from datetime import datetime
 from basic import BaseHandler
-from facepp import API,File,APIError
+from facepp import API,APIError,Img
 
 API_KEY = 'b3b9061aaf64ea2515a3538dfb624e94'
 API_SECRET = 'OfvW6DdyM9iqAa8TkBoBhoiWANX6Kn2Z'
@@ -51,13 +51,15 @@ class FaceppHandler(BaseHandler):
 		tmp_uid = self.current_user
 
 		uploadfile = self.request.files.get('pic')
-		tmp_path = self.handle_filename(tmp_uid , uploadfile[0]['filename'] , 'img/')
+		img_binary = uploadfile[0]['body']
+		img_name = uploadfile[0]['filename']
+		tmp_path = self.handle_filename(tmp_uid , img_name , 'img/')
 		picfile = open(tmp_path,"wb")
-		picfile.write(uploadfile[0]['body'])
+		picfile.write(img_binary)
 		picfile.close()
 
 		try:
-			face_detect = api.detection.detect(img = File(tmp_path))
+			face_detect = api.detection.detect(img = Img(img_binary,img_name))
 			if not face_detect['face']:
 				self.write({'error':3 , 'info':'NO FACE'})
 				return
@@ -118,14 +120,19 @@ class FaceRegisterHandler(BaseHandler):
 		if query:
 			self.write({"error":4})
 			return
+
 		tmp_uid = self.current_user
 		uploadfile = self.request.files.get('pic')
-		tmp_path = self.handle_filename(tmp_uid , uploadfile[0]['filename'] , 'img/')
+		img_binary = uploadfile[0]['body']
+		img_name = uploadfile[0]['filename']
+		tmp_path = self.handle_filename(tmp_uid , img_name , 'img/')
+
 		picfile = open(tmp_path,"wb")
-		picfile.write(uploadfile[0]['body'])
+		picfile.write(img_binary)
 		picfile.close()
+
 		try:
-			face_detect = api.detection.detect(img = File(tmp_path))
+			face_detect = api.detection.detect(img = Img(img_binary,img_name))
 			if not face_detect['face']:
 				self.write({'error':5,'info':'No face is detected'})
 				return

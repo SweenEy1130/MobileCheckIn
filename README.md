@@ -74,7 +74,6 @@ RESPONSE:{  "error":
 error:	0 for success
 		1 for face unrecogize
 		2 for not login
-
 Cookie should contain the response set-cookie from the sever when user login(important!)
 example:	HTTP Request HEADER		
 			{"Accept":"application/json",
@@ -92,7 +91,6 @@ HEADER:  {  "Accept":"application/json",
 			"Cookie": client_cookie}
 RESPONSE:{  "error":
 			"faceid":}
-
 error:	0 for success
 		1 for face unrecogized
 		2 for not login
