@@ -52,7 +52,7 @@ class FaceppHandler(BaseHandler):
 
 		uploadfile = self.request.files.get('pic')
 		img_binary = uploadfile[0]['body']
-		img_name = uploadfile[0]['filename']
+		img_name = uploadfile[0]['filename'].encode('gbk')
 		tmp_path = self.handle_filename(tmp_uid , img_name , 'img/')
 		picfile = open(tmp_path,"wb")
 		picfile.write(img_binary)
@@ -124,7 +124,7 @@ class FaceRegisterHandler(BaseHandler):
 		tmp_uid = self.current_user
 		uploadfile = self.request.files.get('pic')
 		img_binary = uploadfile[0]['body']
-		img_name = uploadfile[0]['filename']
+		img_name = uploadfile[0]['filename'].encode('gbk')
 		tmp_path = self.handle_filename(tmp_uid , img_name , 'img/')
 
 		picfile = open(tmp_path,"wb")

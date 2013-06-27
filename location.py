@@ -45,7 +45,7 @@ class UploadLocationHandler(BaseHandler):
 		except:
 			self.write({'error':2})
 			return
-		print latitude,longitude
+		# print latitude,longitude
 		self.db.execute('UPDATE DETECT SET LATITUDE=%f , LONGITUDE=%f WHERE SESSIONID = %d;' % 
 		(latitude ,longitude , sessionid))
 		self.write({'error':0})
