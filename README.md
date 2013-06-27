@@ -194,3 +194,8 @@ the `client_cookie` can get from the server's response
         5 for SQL error
         6 for not enough detect info
 
+### Demo ###
+
+http://202.120.38.26:8888/admin
+
+Contact ronnie.alonso@gmail.com for credentials.
