@@ -1,7 +1,7 @@
 import datetime
 import random
-lat=31.030316
-lng=121.439595
+lat=31.027121
+lng=121.437825
 def ram_int(now):
 	i=random.randint(0,50)
 	j=random.randint(0,50)
@@ -14,7 +14,7 @@ if __name__=="__main__":
 	data = []
 	now = datetime.datetime.now()
 	data.append(ram_int(now))
-	for i in range(200):
+	for i in range(50):
 		now=now + datetime.timedelta(days=-3)
 		data.append(ram_int(now))
 		now=now + datetime.timedelta(hours=9)
@@ -24,8 +24,8 @@ if __name__=="__main__":
 		now=now + datetime.timedelta(days=-7)
 		data.append(ram_int(now))
 	output = open('detect.sql', 'w')
-	uid =[5100309379,50338,1120349095,5080309861,5100309127,5100309150,5100309473,5101109071]
+	uid =[5100309582,5100809149]
 	for item in data:
-		owner = uid[random.randint(0,7)]
+		owner = uid[random.randint(0,1)]
 		sql='INSERT INTO DETECT(OWNER,LONGITUDE,LATITUDE,DETECTTIME,STATUS) VALUES (%s,%s,%s,\'%s\',0);' %(owner,item['LONGITUDE'],item['LATITUDE'],item['DETECTTIME'])
 		output.write(sql+'\n')

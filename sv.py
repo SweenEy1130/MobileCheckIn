@@ -117,10 +117,9 @@ class SpeechDetectHandler(BaseHandler):
 		picfile.close()
 
 		query = self.db.query("SELECT AUDIOENGINE FROM USER WHERE UID = %s" % (tmp_uid))
-		if not query:
+		if (not query) or (query[0]['AUDIOENGINE'] == None):
 			self.write({"error":4})
 			return
-
 		try:
 			ret = sv_dll.SVdetect("./sv/sv.0.0.3.2.bin" , "./static/audio_mod/%s.bin" % (tmp_uid) , "./"+tmp_path , 1 ,1)
 			# if (ret >= 1):

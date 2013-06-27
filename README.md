@@ -19,6 +19,8 @@ Mobile Check In
 * settings.py	系统设置-端口和IP
 * init.sql	MySQL初始化配置
 * config.conf	服务器配置文件
+
+
 API文档
 ----------------------------
 * 登陆界面
@@ -44,6 +46,20 @@ RESPONSE:{  "error":}
 error:  0 for success
         1 for username exist
         2 for password or username can't be empty
+
+* 查询用户注册状态
+API:
+GET: http://domain:port/checkstatus
+HEADER:  {  "Content-type":"application/json",
+            "Accept":"text/plain",
+            "Connection": "Keep-Alive", 
+            "Cache-Control": "no-cache",
+            "Cookie": client_cookie }
+RESPONSE:{  "error":0}
+error:  0 for success
+        1 for not login
+        2 for SQL error
+
 
 * 面部验证
 API http://localhost:8000/faceverify
@@ -174,4 +190,7 @@ error:  0 for success
         1 for fail
         2 for not login
         3 for no sessionid
-        4 for SQL error
+        4 for SQL error0 for success
+        5 for SQL error
+        6 for not enough detect info
+

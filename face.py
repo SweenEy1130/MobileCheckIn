@@ -126,7 +126,11 @@ class FaceRegisterHandler(BaseHandler):
 		picfile.close()
 		try:
 			face_detect = api.detection.detect(img = File(tmp_path))
-			tmp_face1 = face_detect['face'][0]['face_id']
+			if not face_detect['face']:
+				self.write({'error':5,'info':'No face is detected'})
+				return
+			else:
+				tmp_face1 = face_detect['face'][0]['face_id']
 		except APIError,e:
 			self.write({'error':1 , 'info':json.loads(e.body)['error']})
 			return

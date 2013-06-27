@@ -221,6 +221,7 @@ error:  0 for success
         3 for no sessionid
         4 for empty SQL result
         5 for SQL error
+	6 for not enough detect info
 """
 class DetectResultHandler(BaseHandler):
     def post(self):
@@ -245,7 +246,9 @@ class DetectResultHandler(BaseHandler):
         facedetect = info['FACEDETECT']
         audiodetect = info['AUDIODETECT']
         loc_detect = [info['LATITUDE'] , info['LONGITUDE']]
-        info = self.db.query('SELECT * FROM LOCATION L,USER U WHERE L.LOCID = U.LOCID AND U.UID = %s;' %
+        if (facedetect == None) or (audiodetect==None) or (loc_detect==None):
+		return 6
+	info = self.db.query('SELECT * FROM LOCATION L,USER U WHERE L.LOCID = U.LOCID AND U.UID = %s;' %
             (uid))
         if (not info):
             return 4

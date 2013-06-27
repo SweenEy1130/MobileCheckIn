@@ -168,7 +168,7 @@ class StudentEditHandler(BaseHandler):
 				dt=self.get_argument('dt',None)
 				op=self.get_argument('op',None)
 				if(op == '1'):
-					sql = 'UPDATE DETECT SET STATUS=1 WHERE\
+					sql = 'UPDATE DETECT SET STATUS=0 WHERE\
 					 OWNER=%s AND DETECTTIME=\'%s\';' % (uid,dt)
 					info = self.db.execute(sql)
 					self.write("0")
