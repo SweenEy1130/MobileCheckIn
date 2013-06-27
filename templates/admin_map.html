@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
   <!--                       Javascripts                       -->
   <!-- jQuery -->
-  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <!-- <script src="http://code.jquery.com/jquery-1.9.1.js"></script> -->
   <!-- jQuery Configuration -->
   <script type="text/javascript" src="{{static_url("scripts/simpla.jquery.configuration.js")}}"></script>
   <!-- Facebox jQuery Plugin -->
@@ -24,9 +24,12 @@
   <script type="text/javascript" src="{{static_url("scripts/jquery.datePicker.js")}}"></script>
   <script type="text/javascript" src="{{static_url("scripts/jquery.date.js")}}"></script>
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  <!-- Gmap.js Plugin -->
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
   <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclusterer/1.0/src/markerclusterer.js"></script>
   <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
   <script type="text/javascript" src="{{static_url("scripts/gmaps.js")}}"></script>
+  <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css" />
   <script type="text/javascript">
     var map;
     $(document).ready(function(){
@@ -60,7 +63,10 @@
             map.addMarker({
             lat: resTex[i].LATITUDE,
             lng: resTex[i].LONGITUDE,
-            title: resTex[i].CHINAME
+            title: resTex[i].CHINAME,
+            infoWindow: {
+              content: '<p>'+resTex[i].CHINAME'</p><br><p>Longitude：'+resTex[i].LONGITUDE+'latitude:'+resTex[i].LATITUDE+'</p>'
+            }
           });
           }
       }
