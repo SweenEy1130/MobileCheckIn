@@ -27,9 +27,7 @@ from basic import LoginHandler , RegisterHandler , DetectCreateHandler , DetectR
 from face import FaceppHandler , FaceRegisterHandler
 from sv import SpeechTrainHandler,SpeechDetectHandler
 from location import UploadLocationHandler, LocationRegisterHandler
-
-from tornado.options import define,options
-define("port", default=8888, help="run on the given port", type=int)
+import settings
 
 class Application(tornado.web.Application):
 	def __init__(self):
@@ -78,9 +76,13 @@ class Application(tornado.web.Application):
 		self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = 'root' , password = 'sjtu2012')
 
 if __name__ == "__main__":
-	print "Welcome to Mobile Checkin Server"
-	# tornado.options.parse_config_file("config.conf")
+	# print "Welcome to Mobile Checkin Server"
+	tornado.options.define("port",default=8888,type=int)
+	tornado.options.options['port'].set(settings.port)
+	tornado.options.options['logging'].set(settings.logging)
+	tornado.options.options['log_file_prefix'].set(settings.log_file_prefix)		
 	tornado.options.parse_command_line()
+
 	http_server = tornado.httpserver.HTTPServer(Application())
-	http_server.listen(options.port)
+	http_server.listen(tornado.options.options.port)
 	tornado.ioloop.IOLoop.instance().start()
