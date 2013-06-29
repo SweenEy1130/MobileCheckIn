@@ -1,6 +1,6 @@
 # coding=utf-8
 from tornado.escape import url_unescape,utf8
-import tornado.web
+from basic import BaseHandler
 import datetime 
 import random,string,json
 from jaccount import encrypt , decrypt , find , splitdata

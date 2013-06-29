@@ -4,20 +4,16 @@
 # $Author: ronnie.alonso@gmail.com
 #
 #      0. You just DO WHAT THE FUCK YOU WANT TO.
-import tornado.web
-import tornado.httpclient
 import os,json,string
 from datetime import *
 from ctypes import cdll, c_int , c_char_p , c_double
 from basic import BaseHandler
-import select
 
 # Speech Verify Engine initialize
 sv_dll = cdll.LoadLibrary("./sv/libsv.so")
 sv_dll.SVtrain.argtypes = [c_char_p , c_char_p , c_char_p , c_char_p , c_char_p]
 sv_dll.SVdetect.argtypes = [c_char_p , c_char_p , c_char_p , c_double , c_int]
 sv_dll.SVdetect.restype = c_double
-
 
 """speech train API
 API http://localhost:8000/svtrain

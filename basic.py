@@ -6,14 +6,9 @@
 #      0. You just DO WHAT THE FUCK YOU WANT TO.
 import tornado.web
 import os,json,sys
-from facepp import API,File,APIError
 from datetime import *
 import tornado.httpclient
 from gps import spherical_distance
-
-# API_KEY = 'b3b9061aaf64ea2515a3538dfb624e94'
-# API_SECRET = 'OfvW6DdyM9iqAa8TkBoBhoiWANX6Kn2Z'
-# api = API(API_KEY, API_SECRET)
 
 class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):

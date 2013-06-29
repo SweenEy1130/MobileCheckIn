@@ -4,7 +4,6 @@
 # $Author: ronnie.alonso@gmail.com
 #
 #      0. You just DO WHAT THE FUCK YOU WANT TO. 
-
 import math
 from decimal import Decimal
 """

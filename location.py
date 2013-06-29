@@ -4,7 +4,6 @@
 # $Author: ronnie.alonso@gmail.com
 #
 #      0. You just DO WHAT THE FUCK YOU WANT TO. 
-
 import tornado.web
 import tornado.httpclient
 import os,json,string
@@ -73,9 +72,3 @@ class LocationRegisterHandler(BaseHandler):
 
 		self.db.execute('UPDATE USER SET LOCID = %d WHERE UID = %s;' % (locid , uid))
 		self.write({'error':0})
-
-if __name__ == '__main__':
-	frompoint = [40.0351,116.40863583333334]
-	topoint = [40.0352,116.4086358333333]
-	g=GPS()
-	print g.spherical_distance(frompoint,topoint)
