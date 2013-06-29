@@ -11,9 +11,9 @@ from datetime import *
 import tornado.httpclient
 from gps import spherical_distance
 
-API_KEY = 'b3b9061aaf64ea2515a3538dfb624e94'
-API_SECRET = 'OfvW6DdyM9iqAa8TkBoBhoiWANX6Kn2Z'
-api = API(API_KEY, API_SECRET)
+# API_KEY = 'b3b9061aaf64ea2515a3538dfb624e94'
+# API_SECRET = 'OfvW6DdyM9iqAa8TkBoBhoiWANX6Kn2Z'
+# api = API(API_KEY, API_SECRET)
 
 class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
@@ -34,14 +34,6 @@ class BaseHandler(tornado.web.RequestHandler):
     @property
     def db(self):
         return self.application.db
-
-class TestHandler(BaseHandler):
-    def get(self):
-        self.write("GET method")
-
-    def post(self):
-        print self.request
-        self.write("POST method")
 
 """登陆界面
 API:    http://domain:port/login
@@ -127,11 +119,11 @@ class RegisterHandler(BaseHandler):
         else:
             # register success
             self.set_secure_cookie("uid", str(res), 1)
-            try:
-                person_create = api.person.create(person_name = res , group_name = u'Students')
-            except APIError,e:
-                self.write({'error':3 , 'info':json.loads(e.body)['error']})
-                return
+            # try:
+            #     person_create = api.person.create(person_id = res , group_name = u'Students')
+            # except APIError,e:
+            #     self.write({'error':3 , 'info':json.loads(e.body)['error']})
+            #     return
             self.write({'error':0})
 
     def insertInfo(self , username , password):

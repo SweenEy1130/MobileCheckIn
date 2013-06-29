@@ -7,13 +7,10 @@
 from basic import BaseHandler
 from datetime import *
 from settings import port,domain
-import random,string,json
 from jaccount import encrypt , decrypt , find , splitdata
+import random,string,json
+import faceppKit
 
-from facepp import API,File,APIError
-API_KEY = 'b3b9061aaf64ea2515a3538dfb624e94'
-API_SECRET = 'OfvW6DdyM9iqAa8TkBoBhoiWANX6Kn2Z'
-api = API(API_KEY, API_SECRET)
 """用户JACCOUNT LOGIN
 API:    http://localhost:port/jalogin
 RESPONSE:{  "error":0}
@@ -23,13 +20,11 @@ RESPONSE:{  "error":0}
 """
 class JaLoginHandler(BaseHandler):
     def get(self):
-        # print "JaLogin"
         if not self.get_arguments('jatkt'):
             siteID = 'jasignin20130507'
             uaBaseURL="http://jaccount.sjtu.edu.cn/jaccount/"
             returl = 'http://'+domain+':'+str(port)+'/jalogin'
             iv = string.join(random.sample('1234567890abcdef',8),'')
-            # print "iv:" , iv
             self.set_secure_cookie('iv' , iv , None)
             redirectURL =  uaBaseURL + "jalogin?sid="+siteID+"&returl="+encrypt(returl,iv)+"&se="+encrypt(iv,iv)
             self.redirect(redirectURL)
@@ -53,7 +48,6 @@ class JaLoginHandler(BaseHandler):
             self.set_secure_cookie('uid' , ProfileData['id'] , None)
             self.set_cookie('chiname' , ProfileData['chinesename'] , None)
             self.write({"error":0})
-            return
 
     def update_user(self , profile):
         uid = profile['id']
@@ -66,19 +60,22 @@ class JaLoginHandler(BaseHandler):
             sql = "INSERT INTO USER(UID,USERNAME,CHINAME,DEPARTMENT,LOCID,CREATETIME)\
                 VALUES(%s,\'%s\',\'%s\',\'%s\',1,\'%s\')" % (uid,username,chiname,dept,now)
             res = self.db.execute(sql)
+            
             # FACE++
             try:
-                person_create = api.person.create(person_name = uid , group_name = u'Students')
-            except APIError,e:
-                self.write({'error':3 , 'info':json.loads(e.body)['error']})
-		# print res
+                url = facepp_kit.CreatePerson(uid,u'Students')
+                response = urllib2.urlopen(url)
+                person_create = response.read()
+            except urllib2.URLError, e:
+                if not hasattr(e, "code"):
+                    raise
+                self.write({'error':3 , 'info':json.loads(e.read())['error']})
         else:
             info=info[0]
             if (not info['LOCID']) or (not info['DEPARTMENT']) or(not info['CHINAME']):
                 sql="UPDATE USER SET USERNAME=\'%s\',LOCID=1,DEPARTMENT=\'%s\',CHINAME=\'%s\' WHERE UID=%s;" %\
                     (username,dept,chiname,uid)
                 res=self.db.execute(sql)
-		# print res
 
 """用户JACCOUNT LOGOUT
 API:    http://localhost:port/jalogout

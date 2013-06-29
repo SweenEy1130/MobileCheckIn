@@ -7,13 +7,9 @@
 import tornado.web
 import tornado.httpclient
 import os,json,string
+import faceppKit
 from datetime import datetime
 from basic import BaseHandler
-from facepp import API,APIError,Img
-
-API_KEY = 'b3b9061aaf64ea2515a3538dfb624e94'
-API_SECRET = 'OfvW6DdyM9iqAa8TkBoBhoiWANX6Kn2Z'
-api = API(API_KEY, API_SECRET)
 
 """face verification API
 API http://localhost:8000/faceverify
@@ -39,52 +35,59 @@ example:	HTTP Request HEADER
 			"Cookie": client_cookie }
 """
 class FaceppHandler(BaseHandler):
-	# @tornado.web.asynchronous
+	def handle_request(self,response):
+		if response.error:
+			self.write({'error':1,'info':response.error})
+			self.finish()
+			return
+		else:
+			face_detect = json.loads(response.body)
+			if not face_detect['face']:
+				self.write({'error':3 , 'info':'NO FACE'})
+				self.finish()
+				return
+			else:
+				self.tmp_face1 = face_detect['face'][0]['face_id']
+
+			info = self.db.query('SELECT IMAGESAMPLE FROM USER WHERE UID = %d' % (string.atoi(self.uid)))
+			tmp_face2 = info[0]['IMAGESAMPLE']
+
+			http_client = tornado.httpclient.AsyncHTTPClient()
+			http_request=faceppKit.FaceCompare(self.tmp_face1,tmp_face2)
+			http_client.fetch(http_request, callback=self.handle_request2)
+
+	def handle_request2(self,response):
+		response=json.loads(response.body)
+		similarity = float(response["similarity"])
+		self.db.execute('UPDATE DETECT SET FACEHASH=\'%s\' , FACEDETECT=%f WHERE SESSIONID=%d;' % (self.tmp_face1 , similarity , self.sessionid))
+		self.write({"error":0,"similarity":similarity})
+		self.finish() 
+
+	@tornado.web.asynchronous
 	def post(self):
 		if not self.current_user:
 			self.write({"error":2})
+			self.finish()
 			return
 		if (not self.get_secure_cookie("sessionid")):
 			self.write({"error":4})
+			self.finish()
 			return
-		sessionid = int(self.get_sessionid())
-		tmp_uid = self.current_user
+		self.sessionid = int(self.get_sessionid())
+		self.uid = self.current_user
 
 		uploadfile = self.request.files.get('pic')
 		img_binary = uploadfile[0]['body']
 		img_name = uploadfile[0]['filename'].encode('gbk')
-		tmp_path = self.handle_filename(tmp_uid , img_name , 'img/')
+		tmp_path = self.handle_filename(self.uid , img_name , 'img/')
 		picfile = open(tmp_path,"wb")
 		picfile.write(img_binary)
 		picfile.close()
 
-		try:
-			face_detect = api.detection.detect(img = Img(img_binary,img_name))
-			if not face_detect['face']:
-				self.write({'error':3 , 'info':'NO FACE'})
-				return
-			else:
-				tmp_face1 = face_detect['face'][0]['face_id']
-		except APIError,e:
-			self.write({'error':1 , 'info':json.loads(e.body)['error']})
-			return
+		http_client = tornado.httpclient.AsyncHTTPClient()
+		http_request=faceppKit.FaceDetect(img_binary,img_name)
+		http_client.fetch(http_request, callback=self.handle_request)
 
-		info = self.db.query('SELECT IMAGESAMPLE FROM USER WHERE UID = %d' % (string.atoi(tmp_uid)))
-		tmp_face2 = info[0]['IMAGESAMPLE']
-
-		# global API_SECRET,API_KEY
-		# client = tornado.httpclient.AsyncHTTPClient()
-		# client.fetch("https://api.faceplusplus.com/recognition/compare?api_secret=%s&api_key=%s&face_id2=%s&face_id1=%s"
-		# 			% (API_KEY,API_SECRET,tmp_face1,tmp_face2),
-		# 			callback=self.on_response)
-		response = api.recognition.compare(face_id1 = tmp_face1 , face_id2 =tmp_face2)
-		similarity = float(response["similarity"])
-		self.db.execute('UPDATE DETECT SET FACEHASH=\'%s\' , FACEDETECT=%f WHERE SESSIONID=%d;' % 
-		(tmp_face1 , similarity , sessionid))
-		self.write({"error":0,
-					"similarity":similarity})
-
-		
 """face regeister API
 API http://localhost:8000/faceregister
 POST:	http://localhost:8000/faceregister
@@ -111,40 +114,55 @@ example:	HTTP Request HEADER
 			"Cookie": client_cookie}
 """
 class FaceRegisterHandler(BaseHandler):
-	# @tornado.web.asynchronous
+	def handle_request(self,response):
+		if response.error:
+			self.write({'error':1,'info':response.error})
+			self.finish()
+			return
+		else:
+			face_detect = json.loads(response.body)
+			if not face_detect['face']:
+				self.write({'error':5,'info':'No face is detected'})
+				self.finish()
+				return
+			else:
+				self.tmp_face1 = face_detect['face'][0]['face_id']
+
+		http_client = tornado.httpclient.AsyncHTTPClient()
+		http_request=faceppKit.AddFace(self.uid,self.tmp_face1)
+		http_client.fetch(http_request, callback=self.handle_request2)
+
+	def handle_request2(self,response):
+		add_face=json.loads(response.body)
+		if add_face["success"] == True:
+			self.db.execute("UPDATE USER SET IMAGESAMPLE = \'%s\'	WHERE UID = %s" % (self.tmp_face1 , self.uid))
+			self.write({"error":0,"faceid":self.tmp_face1})
+		else:
+			self.write({"error":3})
+		self.finish()
+
+	@tornado.web.asynchronous
 	def post(self):
 		if not self.current_user:
 			self.write({"error":2})
+			self.finish()
 			return
 		query = self.db.execute("SELECT IMAGESAMPLE FROM USER WHERE UID = %s" % (self.current_user))
 		if query:
 			self.write({"error":4})
+			self.finish()
 			return
-
-		tmp_uid = self.current_user
+		self.uid = self.current_user
 		uploadfile = self.request.files.get('pic')
+
 		img_binary = uploadfile[0]['body']
 		img_name = uploadfile[0]['filename'].encode('gbk')
-		tmp_path = self.handle_filename(tmp_uid , img_name , 'img/')
-
+		tmp_path = self.handle_filename(self.uid , img_name , 'img/')
 		picfile = open(tmp_path,"wb")
 		picfile.write(img_binary)
 		picfile.close()
 
-		try:
-			face_detect = api.detection.detect(img = Img(img_binary,img_name))
-			if not face_detect['face']:
-				self.write({'error':5,'info':'No face is detected'})
-				return
-			else:
-				tmp_face1 = face_detect['face'][0]['face_id']
-		except APIError,e:
-			self.write({'error':1 , 'info':json.loads(e.body)['error']})
-			return
-		add_face = api.person.add_face(person_name = tmp_uid,face_id = tmp_face1)
-		if add_face["success"] == True:
-			self.db.execute("UPDATE USER SET IMAGESAMPLE = \'%s\'	WHERE UID = %s" % (tmp_face1 , tmp_uid))
-			self.write({"error":0,"faceid":tmp_face1})
-		else:
-			self.write({"error":3})
+		http_client = tornado.httpclient.AsyncHTTPClient()
+		http_request=faceppKit.FaceDetect(img_binary,img_name)
+		http_client.fetch(http_request, callback=self.handle_request)
 
