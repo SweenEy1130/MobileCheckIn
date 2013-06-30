@@ -4,13 +4,13 @@
 # $Author: ronnie.alonso@gmail.com
 #
 #      0. You just DO WHAT THE FUCK YOU WANT TO.
-import os,json,string
+import os,json,string,sys
 from datetime import *
 from ctypes import cdll, c_int , c_char_p , c_double
 from basic import BaseHandler
 
 # Speech Verify Engine initialize
-sv_dll = cdll.LoadLibrary("./sv/libsv.so")
+sv_dll = cdll.LoadLibrary(sys.path[0]+"/sv/libsv.so")
 sv_dll.SVtrain.argtypes = [c_char_p , c_char_p , c_char_p , c_char_p , c_char_p]
 sv_dll.SVdetect.argtypes = [c_char_p , c_char_p , c_char_p , c_double , c_int]
 sv_dll.SVdetect.restype = c_double
@@ -60,7 +60,7 @@ class SpeechTrainHandler(BaseHandler):
 		picfile.close()
 
 		try:
-			ret = sv_dll.SVtrain("./sv/sv.0.0.3.2.bin" , "./static/audio_mod/%s.bin" % (tmp_uid) , "./"+file1 , "./"+file2 , "./"+file3)
+			ret = sv_dll.SVtrain(sys.path[0]+"/sv/sv.0.0.3.2.bin" , sys.path[0]+"/static/audio_mod/%s.bin" % (tmp_uid) , sys.path[0]+"/"+file1 , sys.path[0]+"/"+file2 , sys.path[0]+"/"+file3)
 			print ret
 			if (ret == 1):
 				self.write({"error": 2})
@@ -117,17 +117,11 @@ class SpeechDetectHandler(BaseHandler):
 			self.write({"error":4})
 			return
 		try:
-			ret = sv_dll.SVdetect("./sv/sv.0.0.3.2.bin" , "./static/audio_mod/%s.bin" % (tmp_uid) , "./"+tmp_path , 1 ,1)
-			# if (ret >= 1):
+			ret = sv_dll.SVdetect(sys.path[0]+"/sv/sv.0.0.3.2.bin" , sys.path[0]+"/static/audio_mod/%s.bin" % (tmp_uid) , sys.path[0]+"/"+tmp_path , 1 ,1)
 			self.db.execute('UPDATE DETECT SET AUDIOHASH = \'%s\', AUDIODETECT = %f WHERE SESSIONID=%d;' % 
 		(tmp_path ,ret,sessionid))
 			self.write({"error": 0})
 			return
-		# 	else:
-		# 		self.db.execute('UPDATE DETECT SET AUDIOHASH = \'%s\' , AUDIODETECT = %d WHERE SESSIONID=%d;' % 
-		# (tmp_path ,1,sessionid))
-		# 		self.write({"error":2})
-		# 		return
 		except:
 			self.write({"error": -1})
 			return

@@ -20,9 +20,9 @@ class BaseHandler(tornado.web.RequestHandler):
         format = filename.rsplit('.' , 1)
         s = datetime.now()
         try:
-            path = 'static/'+ loc + uid + "%d%d%d%d."%(s.hour,s.minute,s.second,s.microsecond) + format[1]
+            path = sys.path[0]+'/static/'+ loc + uid + "%d%d%d%d."%(s.hour,s.minute,s.second,s.microsecond) + format[1]
         except:
-            path = 'static/' + loc + uid + "%d%d%d%d"%(s.hour,s.minute,s.second,s.microsecond)
+            path = sys.path[0]+'/static/' + loc + uid + "%d%d%d%d"%(s.hour,s.minute,s.second,s.microsecond)
         # unicode error
         return path.encode('gbk')
 

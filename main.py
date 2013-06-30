@@ -80,7 +80,7 @@ if __name__ == "__main__":
 	tornado.options.define("port",default=8888,type=int)
 	tornado.options.options['port'].set(settings.port)
 	tornado.options.options['logging'].set(settings.logging)
-	tornado.options.options['log_file_prefix'].set(settings.log_file_prefix)		
+	# tornado.options.options['log_file_prefix'].set(settings.log_file_prefix)		
 	tornado.options.parse_command_line()
 
 	http_server = tornado.httpserver.HTTPServer(Application())

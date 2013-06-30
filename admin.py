@@ -5,14 +5,6 @@ import datetime
 import random,string,json
 from jaccount import encrypt , decrypt , find , splitdata
 
-class BaseHandler(tornado.web.RequestHandler):
-	def get_current_user(self):
-		return self.get_secure_cookie("uid")
-
-	@property
-	def db(self):
-		return self.application.db
-
 """Admin Main Page
 http://domain:port/admin
 """

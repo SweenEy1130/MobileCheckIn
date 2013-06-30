@@ -1,6 +1,6 @@
 # coding=gbk
 from pyDes import *
-import string,random,base64,urllib2,re
+import string,random,base64,urllib2,re,sys
 from tornado.web import HTTPError
 
 def find(s,regex):
@@ -25,7 +25,7 @@ def splitdata(data):
     return c
     
 def keydata():
-    f_path = "jasignin20130507_desede.key"
+    f_path = sys.path[0]+"/jasignin20130507_desede.key"
     f = open(f_path,'rb')
     f_data = f.read()
     f.close()
