@@ -26,7 +26,6 @@ error:	0 for success
 		2 for not login
 		3 for not face
 		4 for no sessionid
-
 Cookie should contain the response set-cookie from the sever when user login(important!)
 example:	HTTP Request HEADER		
 			{"Accept":"application/json",
@@ -37,39 +36,48 @@ example:	HTTP Request HEADER
 class FaceppHandler(BaseHandler):
 	def handle_request(self,response):
 		if response.error:
+			print 'error:1;info:'+response.error
 			self.write({'error':1,'info':response.error})
 			self.finish()
 			return
 		else:
 			face_detect = json.loads(response.body)
 			if not face_detect['face']:
+				print 'error:3;info:NO FACE'
 				self.write({'error':3 , 'info':'NO FACE'})
 				self.finish()
 				return
 			else:
-				self.tmp_face1 = face_detect['face'][0]['face_id']
+				tmp_face1 = face_detect['face'][0]['face_id']
 
 			info = self.db.query('SELECT IMAGESAMPLE FROM USER WHERE UID = %d' % (string.atoi(self.uid)))
 			tmp_face2 = info[0]['IMAGESAMPLE']
 
 			http_client = tornado.httpclient.AsyncHTTPClient()
-			http_request=faceppKit.FaceCompare(self.tmp_face1,tmp_face2)
+			http_request=faceppKit.FaceCompare(tmp_face1,tmp_face2)
 			http_client.fetch(http_request, callback=self.handle_request2)
 
 	def handle_request2(self,response):
 		response=json.loads(response.body)
-		similarity = float(response["similarity"])
-		self.db.execute('UPDATE DETECT SET FACEHASH=\'%s\' , FACEDETECT=%f WHERE SESSIONID=%d;' % (self.tmp_face1 , similarity , self.sessionid))
-		self.write({"error":0,"similarity":similarity})
+		if response.has_key("similarity"):
+			similarity = float(response["similarity"])
+			self.db.execute('UPDATE DETECT SET FACEHASH=\'%s\' , FACEDETECT=%f WHERE SESSIONID=%d;' % (self.filename , similarity , self.sessionid))
+			print 'error:0;	similarity:	%f' % similarity			
+			self.write({"error":0,"similarity":similarity})
+		else:
+			print 'error:3;info:no similarity'
+			self.write({"error":1})
 		self.finish() 
 
 	@tornado.web.asynchronous
 	def post(self):
 		if not self.current_user:
+			print 'error:2;info:not login'
 			self.write({"error":2})
 			self.finish()
 			return
 		if (not self.get_secure_cookie("sessionid")):
+			print 'error:4;info:not create'
 			self.write({"error":4})
 			self.finish()
 			return
@@ -80,6 +88,7 @@ class FaceppHandler(BaseHandler):
 		img_binary = uploadfile[0]['body']
 		img_name = uploadfile[0]['filename'].encode('gbk')
 		tmp_path = self.handle_filename(self.uid , img_name , 'img/')
+		self.filename = tmp_path.split('/')[2]
 		picfile = open(tmp_path,"wb")
 		picfile.write(img_binary)
 		picfile.close()
@@ -116,12 +125,14 @@ example:	HTTP Request HEADER
 class FaceRegisterHandler(BaseHandler):
 	def handle_request(self,response):
 		if response.error:
+			print 'error:1;info:'+response.error
 			self.write({'error':1,'info':response.error})
 			self.finish()
 			return
 		else:
 			face_detect = json.loads(response.body)
 			if not face_detect['face']:
+				print 'error:5;info:No face is detected'
 				self.write({'error':5,'info':'No face is detected'})
 				self.finish()
 				return
@@ -135,7 +146,7 @@ class FaceRegisterHandler(BaseHandler):
 	def handle_request2(self,response):
 		add_face=json.loads(response.body)
 		if add_face["success"] == True:
-			self.db.execute("UPDATE USER SET IMAGESAMPLE = \'%s\'	WHERE UID = %s" % (self.tmp_face1 , self.uid))
+			self.db.execute("UPDATE USER SET IMAGESAMPLE = \'%s\' WHERE UID = %s" % (self.tmp_face1 , self.uid))
 			self.write({"error":0,"faceid":self.tmp_face1})
 		else:
 			self.write({"error":3})

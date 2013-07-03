@@ -32,8 +32,6 @@ import settings
 class Application(tornado.web.Application):
 	def __init__(self):
 		handlers = [
-			# (r"/test", TestHandler),
-
 			# Mobile API
 			# (r"/login", LoginHandler),
 			# (r"/register", RegisterHandler),
