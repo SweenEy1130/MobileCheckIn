@@ -20,9 +20,6 @@
 <script type="text/javascript" src="{{static_url("scripts/facebox.js")}}"></script>
 <!-- jQuery WYSIWYG Plugin -->
 <script type="text/javascript" src="{{static_url("scripts/jquery.wysiwyg.js")}}"></script>
-<!-- jQuery Datepicker Plugin -->
-<script type="text/javascript" src="{{static_url("scripts/jquery.datePicker.js")}}"></script>
-<script type="text/javascript" src="{{static_url("scripts/jquery.date.js")}}"></script>
 <script type="text/javascript">
 function ischeckNum()
 {
@@ -145,9 +142,6 @@ function DeleteFunction(index,op){
       <!-- Start Content Box -->
       <div class="content-box-header">
         <h3>管理员设置</h3>
-        <ul class="content-box-tabs">
-          <li><a href="#tab1" class="default-tab">增加删除管理员</a></li>
-        </ul>
         <div class="clear"></div>
       </div>
       <!-- End .content-box-header -->
@@ -156,7 +150,7 @@ function DeleteFunction(index,op){
           <!-- This is the target div. id must match the href of this div's tab -->
           <div class="notification attention png_bg">
             <a href="#" class="close"><img src="{{static_url("images/icons/cross_grey_small.png")}}" title="关闭提醒" alt="close" /></a>
-            <div> &#26597;&#35810;&#30340;&#32467;&#26524;&#20250;&#22312;&#19979;&#34920;&#26174;&#31034;&#12290;&#28857;&#20987;&#21491;&#19978;&#35282;&#30340;&#21449;&#21363;&#21487;&#20851;&#38381;&#25552;&#37266;&#12290; </div>
+            <div>请输入增加新增管理员的学号／工号，以此添加管理员；点击管理员信息中的叉来删除管理员。</div>
           </div>
           <div class="bulk-actions align-left">
           <form action="/admin/manage" method="GET" onsubmit="return ischeckNum();">
