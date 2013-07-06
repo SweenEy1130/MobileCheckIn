@@ -221,9 +221,9 @@ function EditFunction(index,op){
                 <!--<a href="#" onclick="EditFunction({{index}},1)" title="Edit" value={{str(index)}}><img src="{{static_url("images/icons/pencil.png")}}" title="修改" alt="Edit" /></a>
                 <a href="#" onclick="EditFunction({{index}},2)" title="Reset" value={{str(index)}}><img src="{{static_url("images/icons/hammer_screwdriver.png")}}" title="重置" alt="Reset" /></a>
                 <a href="#" onclick="EditFunction({{index}},3)" title="Delete" value={{str(index)}}><img src="{{static_url("images/icons/cross.png")}}" title="删除"alt="Delete" /></a></td>-->
-		<img onclick="EditFunction({{index}},1)" src="{{static_url("images/icons/pencil.png")}}" title="修改" alt="Edit" />
-		<img onclick="EditFunction({{index}},2)" src="{{static_url("images/icons/hammer_screwdriver.png")}}" title="重置" alt="Reset" />
-		<img onclick="EditFunction({{index}},3)" src="{{static_url("images/icons/cross.png")}}" title="删除"alt="Delete" />
+		<img onclick="EditFunction({{index}},1)" src="{{static_url("images/icons/pencil.png")}}" title="确认此次签到" alt="Edit" />
+		<img onclick="EditFunction({{index}},2)" src="{{static_url("images/icons/hammer_screwdriver.png")}}" title="重置用户注册信息" alt="Reset" />
+		<img onclick="EditFunction({{index}},3)" src="{{static_url("images/icons/cross.png")}}" title="删除此次签到"alt="Delete" />
               </tr>
               {% end %}
               <tr>

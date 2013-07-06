@@ -55,13 +55,14 @@
       if (xmlhttp.readyState==4 && xmlhttp.status==200){
           var resTex=xmlhttp.responseText;
           resTex=eval(resTex);
-          for(var i=0; i<resTex.length; i++){
+          map.removeMarkers();
+	  for(var i=0; i<resTex.length; i++){
             map.addMarker({
             lat: resTex[i].LATITUDE,
             lng: resTex[i].LONGITUDE,
             title: resTex[i].CHINAME,
             infoWindow: {
-              content: '<p>'+resTex[i].CHINAME+'</p><br><p>Longitude：'+resTex[i].LONGITUDE+'latitude:'+resTex[i].LATITUDE+'</p>'
+              content: '<p>'+resTex[i].CHINAME+'</p><br><p>签到时间：'+resTex[i].DETECTTIME+'</p>'
             }
           });
           }
@@ -186,7 +187,7 @@
             开始时间：<input type="text" id="datepicker1" name="start" value = "{{date1}}"/>
             结束时间：<input type="text" id="datepicker2" name="terminal" value = "{{date2}}"/>
             <input type="button" value="&#26597;&#35810;" onclick="isDate();">
-          </div>
+	</div>
           <div class="clear"></div>
           <br><hr><br>
           <table>

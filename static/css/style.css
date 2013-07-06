@@ -350,7 +350,7 @@ ul.content-box-tabs li a.current {
                 box-shadow: 0px 5px 20px #ccc;
 }
 /************ Statistic ********/
-canvas{
+.time-stat{
                 height:300px;
                 width:45%;
                 margin: 20px;

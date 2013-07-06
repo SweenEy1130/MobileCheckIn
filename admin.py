@@ -347,6 +347,15 @@ class MapHandler(BaseHandler):
 			self.render("admin_map.html", chiname=chiname , date1=start,date2=terminal)
 			return
 
+""" Handle JSON datetime """
+class ComplexEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.strftime('%Y-%m-%d %H:%M:%S')
+        elif isinstance(obj, date):
+            return obj.strftime('%Y-%m-%d')
+        else:
+            return json.JSONEncoder.default(self, obj)
 
 """Map Statistics Search API
 http://domain:port/admin/map_stat/search?start=...&terminal=...
@@ -363,14 +372,14 @@ class MapQueryHandler(BaseHandler):
 				start=self.get_argument('start',None)
 				terminal=self.get_argument('terminal',None)
 				info = self.query(start,terminal)
-		info = json.dumps(info)
+		info = json.dumps(info,cls=ComplexEncoder)
 		# print info		
 		self.write(info)
 
 	def query(self,start,terminal):
 		start = self.date2time(start," 00:00:00")
 		terminal = self.date2time(terminal ,' 23:59:59')
-		sql='SELECT U.CHINAME,D.LONGITUDE,D.LATITUDE \
+		sql='SELECT U.CHINAME,D.LONGITUDE,D.LATITUDE,D.DETECTTIME \
 		 		FROM USER U, DETECT D WHERE U.UID = D.OWNER AND \
 		 			D.DETECTTIME <= \'%s\' AND D.DETECTTIME >=\'%s\' AND D.STATUS=0;' % (terminal,start)
 		info = self.db.query(sql)
