@@ -12,3 +12,13 @@ domain="202.120.38.26"
 logging = 'debug'
 #log level
 
+# facepp key
+API_KEY = 'b3b9061aaf64ea2515a3538dfb624e94'
+API_SECRET = 'OfvW6DdyM9iqAa8TkBoBhoiWANX6Kn2Z'
+
+# MySQL database config
+dbname = 'root'
+dbpass = 'sjtu2012'
+
+# Jaccount config
+siteID = 'jasignin20130507'

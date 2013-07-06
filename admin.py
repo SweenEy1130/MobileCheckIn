@@ -4,6 +4,7 @@ from basic import BaseHandler
 import datetime 
 import random,string,json
 from jaccount import encrypt , decrypt , find , splitdata
+from settings import siteID
 
 """Admin Main Page
 http://domain:port/admin
@@ -43,7 +44,6 @@ http://domain:port/admin/jalogin
 class AdminJaLoginHandler(BaseHandler):
 	def get(self):
 		if not self.get_arguments('jatkt'):
-			siteID = 'jasignin20130507'
 			uaBaseURL="http://jaccount.sjtu.edu.cn/jaccount/"
 			returl = 'http://'+domain+':'+str(port)+'/admin/jalogin'
 			iv = string.join(random.sample('1234567890abcdef',8),'')
@@ -93,7 +93,6 @@ http://domain:port/admin/jalogout
 class AdminJaLogoutHandler(BaseHandler):
 	def get(self):
 		if self.get_secure_cookie('iv'):
-			siteID = 'jasignin20130507'
 			uaBaseURL="http://jaccount.sjtu.edu.cn/jaccount/"
 			returl = 'http://'+domain+':'+str(port)+'/admin'
 			iv = self.get_secure_cookie('iv')

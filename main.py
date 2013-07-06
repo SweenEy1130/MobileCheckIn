@@ -33,8 +33,6 @@ class Application(tornado.web.Application):
 	def __init__(self):
 		handlers = [
 			# Mobile API
-			# (r"/login", LoginHandler),
-			# (r"/register", RegisterHandler),
 			(r"/jalogin", JaLoginHandler),
 			(r"/jalogout",JaLogoutHandler),
 			(r"/faceverify" , FaceppHandler),
@@ -71,7 +69,7 @@ class Application(tornado.web.Application):
 			debug = True,
 		)
 		tornado.web.Application.__init__(self , handlers , **settings)
-		self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = 'root' , password = 'sjtu2012')
+		self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
 
 if __name__ == "__main__":
 	# print "Welcome to Mobile Checkin Server"

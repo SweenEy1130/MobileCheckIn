@@ -1,211 +1,211 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-  <title>上海交通大学注册报到管理系统</title>
-  <!--                       CSS                       -->
-  <!-- Reset Stylesheet -->
-  <link rel="stylesheet" href="{{static_url("css/reset.css")}}" type="text/css" media="screen" />
-  <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="{{static_url("css/style.css")}}" type="text/css" media="screen" />
-  <!-- Invalid Stylesheet. This makes stuff look pretty. Remove it if you want the CSS completely valid -->
-  <link rel="stylesheet" href="{{static_url("css/invalid.css")}}" type="text/css" media="screen" />
-  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-  <!--                       Javascripts                       -->
-  <!-- jQuery -->
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>上海交通大学注册报到管理系统</title>
+	<!--											 CSS											 -->
+	<!-- Reset Stylesheet -->
+	<link rel="stylesheet" href="{{static_url("css/reset.css")}}" type="text/css" media="screen" />
+	<!-- Main Stylesheet -->
+	<link rel="stylesheet" href="{{static_url("css/style.css")}}" type="text/css" media="screen" />
+	<!-- Invalid Stylesheet. This makes stuff look pretty. Remove it if you want the CSS completely valid -->
+	<link rel="stylesheet" href="{{static_url("css/invalid.css")}}" type="text/css" media="screen" />
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+	<!--											 Javascripts											 -->
+	<!-- jQuery -->
 	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-  <!-- jQuery Configuration -->
-  <script type="text/javascript" src="{{static_url("scripts/simpla.jquery.configuration.js")}}"></script>
-  <!-- Facebox jQuery Plugin -->
-  <script type="text/javascript" src="{{static_url("scripts/facebox.js")}}"></script>
-  <!-- jQuery WYSIWYG Plugin -->
-  <script type="text/javascript" src="{{static_url("scripts/jquery.wysiwyg.js")}}"></script>
-  <!-- jQuery Datepicker Plugin -->
-  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-  <!-- Gmap.js Plugin -->
-  <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclusterer/1.0/src/markerclusterer.js"></script>
-  <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
-  <script type="text/javascript" src="{{static_url("scripts/gmaps.js")}}"></script>
-  <script type="text/javascript">
+	<!-- jQuery Configuration -->
+	<script type="text/javascript" src="{{static_url("scripts/simpla.jquery.configuration.js")}}"></script>
+	<!-- Facebox jQuery Plugin -->
+	<script type="text/javascript" src="{{static_url("scripts/facebox.js")}}"></script>
+	<!-- jQuery WYSIWYG Plugin -->
+	<script type="text/javascript" src="{{static_url("scripts/jquery.wysiwyg.js")}}"></script>
+	<!-- jQuery Datepicker Plugin -->
+	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+	<!-- Gmap.js Plugin -->
+	<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclusterer/1.0/src/markerclusterer.js"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+	<script type="text/javascript" src="{{static_url("scripts/gmaps.js")}}"></script>
+	<script type="text/javascript">
 	var map;
-    $(document).ready(function(){
-      map = new GMaps({
-        div: '#map',
-        lat: 31.02444,
-        lng: 121.436194,
-        markerClusterer: function(map) {
-          return new MarkerClusterer(map);
-        }
-      });
-    });
-  </script>
-  <script type="text/javascript">
-  function QueryCoord(){
-    var xmlhttp;
-    var start,terminal;
-    start=document.getElementById("datepicker1").value;
-    terminal=document.getElementById("datepicker2").value;
-    if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
-      xmlhttp=new XMLHttpRequest();
-      }
-    else{// code for IE6, IE5
-      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-      }
-    xmlhttp.onreadystatechange=function(){
-      if (xmlhttp.readyState==4 && xmlhttp.status==200){
-          var resTex=xmlhttp.responseText;
-          resTex=eval(resTex);
-          map.removeMarkers();
-	  for(var i=0; i<resTex.length; i++){
-            map.addMarker({
-            lat: resTex[i].LATITUDE,
-            lng: resTex[i].LONGITUDE,
-            title: resTex[i].CHINAME,
-            infoWindow: {
-              content: '<p>'+resTex[i].CHINAME+'</p><br><p>签到时间：'+resTex[i].DETECTTIME+'</p>'
-            }
-          });
-          }
-      }
-    }
-    url="/admin/map_stat/search?start="+ start + "&terminal="+ terminal;
-    xmlhttp.open("GET",url,true);
-    xmlhttp.send();
-  }
-  </script>
-  <script>
-  $(function() {
-    $( "#datepicker1" ).datepicker();
-  });
-  $(function() {
-    $( "#datepicker2" ).datepicker();
-  });
-  </script>
-  <!-- Datetime picker!-->
-  <script>
-  function isDate(){
-    var startDtVal = document.getElementById("datepicker1").value
-    var entDtVal = document.getElementById("datepicker2").value
-    if(startDtVal.length==0 || entDtVal.length==0){
-      alert("请输入时间！");
-      return false;
-    }
-    var stT = startDtVal.split("/");
-    var enT = entDtVal.split("/");
-    var date1=new Date();
-    date1.setFullYear(Number(stT[2]),Number(stT[0]),Number(stT[1]));
-    var date2=new Date();
-    date2.setFullYear(Number(enT[2]),Number(enT[0]),Number(enT[1]));
-    if(date1.valueOf()>date2.valueOf()){
-      alert("开始日期不能大于结束日期！");
-      return false;
-    }
-    QueryCoord();
-    return true;
-  }
-  </script>
-  <!-- Time Check JS-->
+		$(document).ready(function(){
+			map = new GMaps({
+				div: '#map',
+				lat: 31.02444,
+				lng: 121.436194,
+				markerClusterer: function(map) {
+					return new MarkerClusterer(map);
+				}
+			});
+		});
+	</script>
+	<script type="text/javascript">
+	function QueryCoord(){
+		var xmlhttp;
+		var start,terminal;
+		start=document.getElementById("datepicker1").value;
+		terminal=document.getElementById("datepicker2").value;
+		if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp=new XMLHttpRequest();
+			}
+		else{// code for IE6, IE5
+			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+			}
+		xmlhttp.onreadystatechange=function(){
+			if (xmlhttp.readyState==4 && xmlhttp.status==200){
+					var resTex=xmlhttp.responseText;
+					resTex=eval(resTex);
+					map.removeMarkers();
+		for(var i=0; i<resTex.length; i++){
+						map.addMarker({
+						lat: resTex[i].LATITUDE,
+						lng: resTex[i].LONGITUDE,
+						title: resTex[i].CHINAME,
+						infoWindow: {
+							content: '<p>'+resTex[i].CHINAME+'</p><br><p>签到时间：'+resTex[i].DETECTTIME+'</p>'
+						}
+					});
+					}
+			}
+		}
+		url="/admin/map_stat/search?start="+ start + "&terminal="+ terminal;
+		xmlhttp.open("GET",url,true);
+		xmlhttp.send();
+	}
+	</script>
+	<script>
+	$(function() {
+		$( "#datepicker1" ).datepicker();
+	});
+	$(function() {
+		$( "#datepicker2" ).datepicker();
+	});
+	</script>
+	<!-- Datetime picker!-->
+	<script>
+	function isDate(){
+		var startDtVal = document.getElementById("datepicker1").value
+		var entDtVal = document.getElementById("datepicker2").value
+		if(startDtVal.length==0 || entDtVal.length==0){
+			alert("请输入时间！");
+			return false;
+		}
+		var stT = startDtVal.split("/");
+		var enT = entDtVal.split("/");
+		var date1=new Date();
+		date1.setFullYear(Number(stT[2]),Number(stT[0]),Number(stT[1]));
+		var date2=new Date();
+		date2.setFullYear(Number(enT[2]),Number(enT[0]),Number(enT[1]));
+		if(date1.valueOf()>date2.valueOf()){
+			alert("开始日期不能大于结束日期！");
+			return false;
+		}
+		QueryCoord();
+		return true;
+	}
+	</script>
+	<!-- Time Check JS-->
 </head>
 <body>
 <div id="body-wrapper">
-  <!-- Wrapper for the radial gradient background -->
-  <div id="sidebar">
-    <div id="sidebar-wrapper">
-      <!-- Sidebar with logo and menu -->
-      <h1 id="sidebar-title"><a href="#">上海交通大学注册报到管理系统</a></h1>
-      <!-- Logo (221px wide) -->
-      <img id="logo" src="{{static_url("images/logo.png")}}" alt="Simpla Admin logo" />
-      <!-- Sidebar Profile links -->
-      <div id="profile-links">
-        <ul>
-          <li><strong>&#20320;&#22909;, {{chiname}}</strong><br />
-            <br />
-          <a href="/admin/logout"><strong>&#30331;&#20986;</strong></a></li>
-        </ul>
-      </div>
-      <ul id="main-nav">
-        <!-- Accordion Menu -->
-        <li> <a href="javascript:void(window.open('http://www.jwc.sjtu.edu.cn/','_blank'));" class="nav-top-item no-submenu">
-          <!-- Add the class "no-submenu" to menu items with no sub menu -->
-          &#25945;&#21153;&#22788;&#20027;&#39029;</a> </li>
-        <li> <a href="#" class="nav-top-item">
-          <!-- Add the class "current" to current menu item -->
-          &#31614;&#21040;&#24773;&#20917; </a>
-          <ul>
-            <li><a href="/admin/student">&#23398;&#29983;&#20449;&#24687;</a></li>
-            <li><a href="/admin/checkin">&#31614;&#21040;&#26597;&#35810;</a></li>
-            <!-- Add class "current" to sub menu items also -->
-            <li><a href="/admin/rule">&#31614;&#21040;&#35268;&#21017;</a></li>
-          </ul>
-        </li>
-        <li> <a href="#" class="nav-top-item current"> &#32479;&#35745;&#20449;&#24687;</a>
-          <ul>
-            <li><a href="/admin/time_stat">&#31614;&#21040;&#26102;&#38388;&#32479;&#35745;</a></li>
-            <li><a class="current" href="#">&#31614;&#21040;&#20301;&#32622;&#32479;&#35745;</a></li>
-          </ul>
-        </li>
-        <li> <a href="#" class="nav-top-item"> &#35774;&#32622;</a>
-          <ul>
-            <li><a href="/admin/manage">&#28155;&#21152;&#31649;&#29702;&#21592;</a></li>
-            <li><a href="/admin/setting">修改密码</a></li>
-          </ul>
-        </li>
-      </ul>
-      <!-- End #main-nav -->
-    </div>
-  </div>
-  <!-- End #sidebar -->
-  <div id="main-content">
-    <!-- Main Content Section with everything -->
-    <noscript>
-    <!-- Show a notification if the user has disabled javascript -->
-    <div class="notification error png_bg">
-      <div> Javascript is disabled or is not supported by your browser. Please <a href="http://browsehappy.com/" title="Upgrade to a better browser">upgrade</a> your browser or <a href="http://www.google.com/support/bin/answer.py?answer=23852" title="Enable Javascript in your browser">enable</a> Javascript to navigate the interface properly.
-        Download From <a href="http://www.exet.tk">exet.tk</a></div>
-    </div>
-    </noscript>
-    <!-- Page Head -->
-    <div class="main-title">
-    <p>&#27426;&#36814;&#26469;&#21040;&#19978;&#28023;&#20132;&#36890;&#22823;&#23398;&#27880;&#20876;&#25253;&#21040;&#31649;&#29702;&#31995;&#32479;
-    <!-- End .clear --></p>
+	<!-- Wrapper for the radial gradient background -->
+	<div id="sidebar">
+		<div id="sidebar-wrapper">
+			<!-- Sidebar with logo and menu -->
+			<h1 id="sidebar-title"><a href="#">上海交通大学注册报到管理系统</a></h1>
+			<!-- Logo (221px wide) -->
+			<img id="logo" src="{{static_url("images/logo.png")}}" alt="Simpla Admin logo" />
+			<!-- Sidebar Profile links -->
+			<div id="profile-links">
+				<ul>
+					<li><strong>&#20320;&#22909;, {{chiname}}</strong><br />
+						<br />
+					<a href="/admin/logout"><strong>&#30331;&#20986;</strong></a></li>
+				</ul>
+			</div>
+			<ul id="main-nav">
+				<!-- Accordion Menu -->
+				<li> <a href="javascript:void(window.open('http://www.jwc.sjtu.edu.cn/','_blank'));" class="nav-top-item no-submenu">
+					<!-- Add the class "no-submenu" to menu items with no sub menu -->
+					&#25945;&#21153;&#22788;&#20027;&#39029;</a> </li>
+				<li> <a href="#" class="nav-top-item">
+					<!-- Add the class "current" to current menu item -->
+					&#31614;&#21040;&#24773;&#20917; </a>
+					<ul>
+						<li><a href="/admin/student">&#23398;&#29983;&#20449;&#24687;</a></li>
+						<li><a href="/admin/checkin">&#31614;&#21040;&#26597;&#35810;</a></li>
+						<!-- Add class "current" to sub menu items also -->
+						<li><a href="/admin/rule">&#31614;&#21040;&#35268;&#21017;</a></li>
+					</ul>
+				</li>
+				<li> <a href="#" class="nav-top-item current"> &#32479;&#35745;&#20449;&#24687;</a>
+					<ul>
+						<li><a href="/admin/time_stat">&#31614;&#21040;&#26102;&#38388;&#32479;&#35745;</a></li>
+						<li><a class="current" href="#">&#31614;&#21040;&#20301;&#32622;&#32479;&#35745;</a></li>
+					</ul>
+				</li>
+				<li> <a href="#" class="nav-top-item"> &#35774;&#32622;</a>
+					<ul>
+						<li><a href="/admin/manage">&#28155;&#21152;&#31649;&#29702;&#21592;</a></li>
+						<li><a href="/admin/setting">修改密码</a></li>
+					</ul>
+				</li>
+			</ul>
+			<!-- End #main-nav -->
+		</div>
 	</div>
-    <div class="content-box">
-      <!-- Start Content Box -->
-      <div class="content-box-header">
-        <h3>位置统计</h3>
-        <div class="clear"></div>
-      </div>
-      <!-- End .content-box-header -->
-      <div class="content-box-content">
-        <div class="tab-content default-tab" id="tab1">
-          <!-- This is the target div. id must match the href of this div's tab -->
-          <div class="notification attention png_bg">
-            <a href="#" class="close"><img src="{{static_url("images/icons/cross_grey_small.png")}}" title="关闭提醒" alt="close" /></a>
-            <div> 以下为学生签到地理位置统计图，你可以查看指定时间段学生签到的位置分布 </div>
-          </div>
-          <div class="bulk-actions align-center">
-            开始时间：<input type="text" id="datepicker1" name="start" value = "{{date1}}"/>
-            结束时间：<input type="text" id="datepicker2" name="terminal" value = "{{date2}}"/>
-            <input type="button" value="&#26597;&#35810;" onclick="isDate();">
+	<!-- End #sidebar -->
+	<div id="main-content">
+		<!-- Main Content Section with everything -->
+		<noscript>
+		<!-- Show a notification if the user has disabled javascript -->
+		<div class="notification error png_bg">
+			<div> Javascript is disabled or is not supported by your browser. Please <a href="http://browsehappy.com/" title="Upgrade to a better browser">upgrade</a> your browser or <a href="http://www.google.com/support/bin/answer.py?answer=23852" title="Enable Javascript in your browser">enable</a> Javascript to navigate the interface properly.
+				Download From <a href="http://www.exet.tk">exet.tk</a></div>
+		</div>
+		</noscript>
+		<!-- Page Head -->
+		<div class="main-title">
+		<p>&#27426;&#36814;&#26469;&#21040;&#19978;&#28023;&#20132;&#36890;&#22823;&#23398;&#27880;&#20876;&#25253;&#21040;&#31649;&#29702;&#31995;&#32479;
+		<!-- End .clear --></p>
 	</div>
-          <div class="clear"></div>
-          <br><hr><br>
-          <table>
-            <div id="map"></div>
-          </table>
-        </div>
-        <!-- End #tab1 -->
-      </div>
-      <!-- End .content-box-content -->
-    </div>
-    <!-- End .content-box -->
-    <div class="clear"></div>
-    <div id="footer"> <small>
-      <!-- Remove this notice or replace it with whatever you want -->
-      &#169; Copyright 2013 SJTU | Powered by <a href="#">SweenEy</a></small> </div>
-    <!-- End #footer -->
-  </div>
-  <!-- End #main-content -->
+		<div class="content-box">
+			<!-- Start Content Box -->
+			<div class="content-box-header">
+				<h3>位置统计</h3>
+				<div class="clear"></div>
+			</div>
+			<!-- End .content-box-header -->
+			<div class="content-box-content">
+				<div class="tab-content default-tab" id="tab1">
+					<!-- This is the target div. id must match the href of this div's tab -->
+					<div class="notification attention png_bg">
+						<a href="#" class="close"><img src="{{static_url("images/icons/cross_grey_small.png")}}" title="关闭提醒" alt="close" /></a>
+						<div> 以下为学生签到地理位置统计图，你可以查看指定时间段学生签到的位置分布 </div>
+					</div>
+					<div class="bulk-actions align-center">
+						开始时间：<input type="text" id="datepicker1" name="start" value = "{{date1}}"/>
+						结束时间：<input type="text" id="datepicker2" name="terminal" value = "{{date2}}"/>
+						<input type="button" value="&#26597;&#35810;" onclick="isDate();">
+	</div>
+					<div class="clear"></div>
+					<br><hr><br>
+					<table>
+						<div id="map"></div>
+					</table>
+				</div>
+				<!-- End #tab1 -->
+			</div>
+			<!-- End .content-box-content -->
+		</div>
+		<!-- End .content-box -->
+		<div class="clear"></div>
+		<div id="footer"> <small>
+			<!-- Remove this notice or replace it with whatever you want -->
+			&#169; Copyright 2013 SJTU | Powered by <a href="#">SweenEy</a></small> </div>
+		<!-- End #footer -->
+	</div>
+	<!-- End #main-content -->
 </div>
 </body>
 <!-- Download From www.exet.tk-->

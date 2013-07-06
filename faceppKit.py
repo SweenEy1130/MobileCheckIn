@@ -9,10 +9,9 @@ import tornado.httpclient
 import itertools
 import mimetools
 import mimetypes
+from settings import API_KEY,API_SECRET
 
 FACEPP_SERVER = "https://apicn.faceplusplus.com/v2"
-API_KEY = 'b3b9061aaf64ea2515a3538dfb624e94'
-API_SECRET = 'OfvW6DdyM9iqAa8TkBoBhoiWANX6Kn2Z'
 
 # ref: http://www.doughellmann.com/PyMOTW/urllib2/
 class _MultiPartForm(object):

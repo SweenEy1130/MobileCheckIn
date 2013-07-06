@@ -1,7 +1,10 @@
 *.py[cod]
 
-# C extensions
-*.so
+# Static
+*.wav
+*.jpg
+*.jpeg
+*.bin
 
 # Packages
 *.egg

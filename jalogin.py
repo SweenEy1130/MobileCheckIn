@@ -10,6 +10,8 @@ from settings import port,domain
 from jaccount import encrypt , decrypt , find , splitdata
 import random,string,json
 import faceppKit
+from settings import siteID
+
 
 """用户JACCOUNT LOGIN
 API:    http://localhost:port/jalogin
@@ -21,7 +23,6 @@ RESPONSE:{  "error":0}
 class JaLoginHandler(BaseHandler):
     def get(self):
         if not self.get_arguments('jatkt'):
-            siteID = 'jasignin20130507'
             uaBaseURL="http://jaccount.sjtu.edu.cn/jaccount/"
             returl = 'http://'+domain+':'+str(port)+'/jalogin'
             iv = string.join(random.sample('1234567890abcdef',8),'')
@@ -84,7 +85,6 @@ RESPONSE:{  "error":0}
 class JaLogoutHandler(BaseHandler):
     def get(self):
         if self.current_user:
-            siteID = 'jasignin20130507'
             uaBaseURL="http://jaccount.sjtu.edu.cn/jaccount/"
             returl = 'http://'+domain+':'+str(port)
             iv = self.get_secure_cookie('iv')
