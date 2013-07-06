@@ -6,11 +6,10 @@
 #      0. You just DO WHAT THE FUCK YOU WANT TO.
 from basic import BaseHandler
 from datetime import *
-from settings import port,domain
+from setting import port,domain,siteID
 from jaccount import encrypt , decrypt , find , splitdata
 import random,string,json
 import faceppKit
-from settings import siteID
 
 
 """用户JACCOUNT LOGIN

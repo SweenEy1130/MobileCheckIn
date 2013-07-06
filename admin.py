@@ -4,7 +4,7 @@ from basic import BaseHandler
 import datetime 
 import random,string,json
 from jaccount import encrypt , decrypt , find , splitdata
-from settings import siteID
+from setting import siteID,port,domain
 
 """Admin Main Page
 http://domain:port/admin
@@ -37,7 +37,6 @@ class adminHandler(BaseHandler):
 		self.set_cookie('login','1')
 		self.redirect('/admin')
 
-from settings import port,domain
 """Admin Jaccount Login Page
 http://domain:port/admin/jalogin
 """

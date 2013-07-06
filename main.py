@@ -27,7 +27,7 @@ from basic import LoginHandler , RegisterHandler , DetectCreateHandler , DetectR
 from face import FaceppHandler , FaceRegisterHandler
 from sv import SpeechTrainHandler,SpeechDetectHandler
 from location import UploadLocationHandler, LocationRegisterHandler
-import settings
+import setting
 
 class Application(tornado.web.Application):
 	def __init__(self):
@@ -68,15 +68,15 @@ class Application(tornado.web.Application):
 			cookie_secret = "bZJc2sWbQLKos6GkHn/VB9oXwQt8S0R0kRvJ5/xJ89E=",
 			debug = True,
 		)
-		tornado.web.Application.__init__(self , handlers , **settings)
-		self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+		tornado.web.Application.__init__(self , handlers , **setting)
+		self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = setting.dbname , password = setting.dbpass)
 
 if __name__ == "__main__":
 	# print "Welcome to Mobile Checkin Server"
 	tornado.options.define("port",default=8888,type=int)
-	tornado.options.options['port'].set(settings.port)
-	tornado.options.options['logging'].set(settings.logging)
-	# tornado.options.options['log_file_prefix'].set(settings.log_file_prefix)		
+	tornado.options.options['port'].set(setting.port)
+	tornado.options.options['logging'].set(setting.logging)
+	# tornado.options.options['log_file_prefix'].set(setting.log_file_prefix)		
 	tornado.options.parse_command_line()
 
 	http_server = tornado.httpserver.HTTPServer(Application())
