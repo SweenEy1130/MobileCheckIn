@@ -1,0 +1,217 @@
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 72, in __init__
+    self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = settings.dbname , password = settings.dbpass)
+AttributeError: 'dict' object has no attribute 'dbname'
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 71, in __init__
+    tornado.web.Application.__init__(self , handlers , **setting)
+TypeError: __init__() argument after ** must be a mapping, not module
+Traceback (most recent call last):
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 82, in <module>
+    http_server = tornado.httpserver.HTTPServer(Application())
+  File "/home/sjtu/Desktop/MobileCheckIn/main.py", line 71, in __init__
+    tornado.web.Application.__init__(self , handlers , **setting)
+TypeError: __init__() argument after ** must be a mapping, not module
+[I 130706 21:54:41 web:1462] 302 GET /admin (202.120.38.26) 1.12ms
+[I 130706 21:54:41 web:1462] 200 GET /admin/student (202.120.38.26) 14.09ms
+[I 130706 21:54:43 web:1462] 200 GET /admin/checkin (202.120.38.26) 8.31ms
+[I 130706 21:54:44 web:1462] 200 GET /admin/rule (202.120.38.26) 6.65ms
+[I 130706 21:54:46 web:1462] 304 GET /admin/time_stat (202.120.38.26) 5.14ms
+[I 130706 21:54:46 web:1462] 304 GET /admin/time_stat/1 (202.120.38.26) 1.07ms
+[I 130706 21:54:46 web:1462] 304 GET /admin/time_stat/2 (202.120.38.26) 0.86ms
+[I 130706 21:54:47 web:1462] 200 GET /admin/map_stat (202.120.38.26) 6.18ms
+[W 130706 21:54:48 web:1462] 404 GET /admin/resources/images/closelabel.gif (202.120.38.26) 1.01ms
+[W 130706 21:54:48 web:1462] 404 GET /admin/undefined (202.120.38.26) 0.35ms
+[I 130706 21:54:52 web:1462] 304 GET /admin/map_stat/search?start=04/02/2013&terminal=07/24/2013 (202.120.38.26) 5.35ms
+[I 130706 21:55:02 web:1462] 304 GET /admin/student (202.120.38.26) 11.34ms
+[I 130706 21:55:02 web:1462] 304 GET /admin/rule (202.120.38.26) 6.44ms
+[I 130706 21:55:55 web:1462] 302 GET /admin/logout (202.120.38.26) 17.09ms
+[I 130706 21:55:55 web:1462] 200 GET /admin?logout=1 (202.120.38.26) 2.00ms
+[I 130706 21:55:55 web:1462] 200 GET /static/images/bg-login.gif (202.120.38.26) 4.86ms
+[I 130706 21:55:55 web:1462] 200 GET /static/images/bg-login-top.png (202.120.38.26) 0.27ms
+[I 130706 21:55:55 web:1462] 200 GET /static/images/icons/information.png (202.120.38.26) 0.28ms
+[I 130706 21:55:55 web:1462] 200 GET /static/images/bg-button-green.gif (202.120.38.26) 0.25ms
+[W 130706 21:55:55 web:1462] 404 GET /resources/images/closelabel.gif (202.120.38.26) 0.93ms
+[W 130706 21:55:55 web:1462] 404 GET /undefined (202.120.38.26) 0.62ms
+[I 130706 21:55:56 web:1462] 302 GET /admin/jalogin (202.120.38.26) 25.82ms
+[I 130706 21:56:06 web:1462] 302 GET /admin/jalogin?jatkt=%43%4a%78%48%6f%30%48%46%66%68%2b%68%6b%38%4e%48%36%75%67%78%72%68%69%5a%67%56%4a%38%33%41%41%75%7a%67%75%59%4f%61%70%42%74%61%52%78%46%52%74%79%63%38%37%47%6c%75%42%34%65%69%4d%6b%31%34%69%58%34%43%4e%36%6e%42%67%56%55%57%6c%45%33%2b%75%32%76%72%57%30%47%64%6a%56%72%77%79%32%36%56%4a%51%49%54%50%64%78%4c%56%73%44%38%38%33%44%75%74%6a%56%39%64%76%50%44%75%43%41%55%2b%68%79%2b%61%4b%41%78%6a%56%6e%46%54%68%70%2f%55%45%63%2b%71%6c%54%61%6d%38%36%6a%6a%4a%32%76%42%73%43%4a%6e%67%4a%4a%52%69%36%56%57%52%62%66%45%6f%55%45%38%7a%2b%34%6d%67%2b%50%39%6a%78%59%66%38%38%44%47%4e%56%30%41%6a%64%38%61%6c%7a%65%64%67%58%74%6e%76%65%41%59%41%7a%65%50%76%67%45%4b%63%4f%30%36%4e%38%35%35%69%52%58%52%4a%41%75%4d%31%53%4f%56%69%61%7a%61%6e%71%78%33%47%2b%39%6c%57%4f%4e%4f%5a%35%33%49%2f%41%30%55%45%78%58%6f%4f%54%34%66%51%55%37%31%5a%79%49%64%46%68%48%67%4f%2b%4b%70%5a%74%31%78%66%69%41%78%54%5a%6c%30%6c%75%55%74%67%4c%59%35%5a%2f%61%6d%2b%38%4f%52%4a%30%7a%4f%70%77%68%61%64%57%79%38%75%47%35%34%46%2b%48%6f%55%6b%72%5a%48%7a%2b%35%47%61%37%48%75%6c%43%69%68%5a%50%6c%79%50%73%76%4d%68%53%73%6f%66%54%2f%73%58%5a%78%32%37%2f%44%69%56%63%46%73%56%38%65%45%59%77%3d%3d (202.120.38.26) 82.32ms
+[I 130706 21:56:06 web:1462] 302 GET /admin (202.120.38.26) 0.54ms
+[I 130706 21:56:06 web:1462] 304 GET /admin/student (202.120.38.26) 9.11ms

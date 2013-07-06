@@ -68,7 +68,7 @@ class Application(tornado.web.Application):
 			cookie_secret = "bZJc2sWbQLKos6GkHn/VB9oXwQt8S0R0kRvJ5/xJ89E=",
 			debug = True,
 		)
-		tornado.web.Application.__init__(self , handlers , **setting)
+		tornado.web.Application.__init__(self , handlers , **settings)
 		self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = setting.dbname , password = setting.dbpass)
 
 if __name__ == "__main__":
