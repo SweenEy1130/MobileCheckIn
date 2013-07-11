@@ -35,6 +35,7 @@ example:	HTTP Request HEADER
 			"Cookie": client_cookie }
 """
 class FaceppHandler(BaseHandler):
+	@tornado.web.asynchronous
 	def handle_request(self,response):
 		if response.error:
 			# print 'error:1;info:'+response.error
@@ -43,7 +44,8 @@ class FaceppHandler(BaseHandler):
 			return
 		else:
 			face_detect = json.loads(response.body)
-			if not face_detect.has_key('face'):
+
+			if face_detect['face'] == []:
 				# print 'error:3;info:NO FACE'
 				self.write({'error':3 , 'info':'NO FACE'})
 				self.finish()
@@ -60,6 +62,7 @@ class FaceppHandler(BaseHandler):
 
 	def handle_request2(self,response):
 		response=json.loads(response.body)
+
 		if response.has_key("similarity"):
 			similarity = float(response["similarity"])
 			self.db.execute('UPDATE DETECT SET FACEHASH=\'%s\' , FACEDETECT=%f WHERE SESSIONID=%d;' % (self.filename , similarity , self.sessionid))
@@ -68,6 +71,7 @@ class FaceppHandler(BaseHandler):
 		else:
 			# print 'error:3;info:no similarity'
 			self.write({"error":1})
+			
 		self.finish() 
 
 	@tornado.web.asynchronous
@@ -124,6 +128,7 @@ example:	HTTP Request HEADER
 			"Cookie": client_cookie}
 """
 class FaceRegisterHandler(BaseHandler):
+	@tornado.web.asynchronous
 	def handle_request(self,response):
 		if response.error:
 			# print 'error:1;info:'+response.error
@@ -132,7 +137,8 @@ class FaceRegisterHandler(BaseHandler):
 			return
 		else:
 			face_detect = json.loads(response.body)
-			if not face_detect.has_key('face'):
+
+			if face_detect['face'] == []:
 				# print 'error:5;info:No face is detected'
 				self.write({'error':5,'info':'No face is detected'})
 				self.finish()
@@ -146,6 +152,7 @@ class FaceRegisterHandler(BaseHandler):
 
 	def handle_request2(self,response):
 		add_face=json.loads(response.body)
+
 		if (not add_face.has_key("success")):
 			self.write({"error":3})
 
