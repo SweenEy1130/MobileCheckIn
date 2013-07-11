@@ -170,11 +170,25 @@ the `client_cookie` can get from the server's response
 - RESPONSE:`{"error": }`
 - ERROR CODE:  
  
- 		0 for success
+ 	0 for success
         1 for SQL error
         2 for not login
 - 返回set-cookie新增sessionid，需加入到http协议的cookie中
 
+### Check User Register Status  ###
+- API: `GET: http://domain:port/checkstatus`
+- HEADER: ` {  "Content-type":"application/json",
+                        "Accept":"text/plain",
+                        "Connection": "Keep-Alive", 
+                        "Cache-Control": "no-cache",
+                        "Cookie": client_cookie }`
+- RESPONSE: `{"error":0}`
+- ERROR CODE:  
+
+        -1 for need to register
+        0 for success
+        1 for not login
+        2 for SQL error
 
 
 ### 查询验证结果 ###

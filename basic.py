@@ -141,9 +141,11 @@ HEADER:  {  "Content-type":"application/json",
 			"Cache-Control": "no-cache",
 			"Cookie": client_cookie }
 RESPONSE:{  "error":0}
-error:  0 for success
-		1 for not login
-		2 for SQL error
+error:  
+	-1 for need to register
+	0 for success
+	1 for not login
+	2 for SQL error
 """
 class CheckStatusHandler(BaseHandler):
 	def get(self):
@@ -154,7 +156,10 @@ class CheckStatusHandler(BaseHandler):
 		try:
 			info = self.db.query('SELECT IMAGESAMPLE,AUDIOENGINE,LOCID FROM USER WHERE UID = %s;' % (uid))
 			res = info[0]
-			res['error'] = 0
+			if(res['IMAGESAMPLE'] != None and res['AUDIOENGINE']!=None and res['LOCID']!=None):
+				res['error'] = 0
+			else:
+				res['error'] = -1
 			self.write(res)
 			return
 		except:

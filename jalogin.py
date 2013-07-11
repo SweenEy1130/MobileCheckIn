@@ -8,7 +8,7 @@ from basic import BaseHandler
 from datetime import *
 from setting import port,domain,siteID
 from jaccount import encrypt , decrypt , find , splitdata
-import random,string,json
+import random,string,json,urllib2
 import faceppKit
 
 
@@ -42,12 +42,14 @@ class JaLoginHandler(BaseHandler):
             ProfileData = splitdata(data.decode('utf-8'))
             # print data.decode('utf-8')
             if ProfileData['ja3rdpartySessionID'] != iv:
-                self.write({"error":1})
+		self.add_header('error',1)
+                # self.write({"error":1})
                 return
             self.update_user(ProfileData)
             self.set_secure_cookie('uid' , ProfileData['id'] , None)
             self.set_cookie('chiname' , ProfileData['chinesename'] , None)
-            self.write({"error":0})
+	    self.add_header('error',0)
+            # self.write({"error":0})
 
     def update_user(self , profile):
         uid = profile['id']
@@ -63,13 +65,15 @@ class JaLoginHandler(BaseHandler):
             
             # FACE++
             try:
-                url = facepp_kit.CreatePerson(uid,u'Students')
+                url = faceppKit.CreatePerson(uid,u'Students')
                 response = urllib2.urlopen(url)
                 person_create = response.read()
             except urllib2.URLError, e:
                 if not hasattr(e, "code"):
                     raise
-                self.write({'error':3 , 'info':json.loads(e.read())['error']})
+		self.add_header('error',3)
+		self.add_header('info',json.loads(e.read())['error'])
+                # self.write({'error':3 , 'info':json.loads(e.read())['error']})
         else:
             info=info[0]
             if (not info['LOCID']) or (not info['DEPARTMENT']) or(not info['CHINAME']):
