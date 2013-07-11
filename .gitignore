@@ -5,6 +5,7 @@
 *.jpg
 *.jpeg
 *.bin
+*.log
 
 # Packages
 *.egg
