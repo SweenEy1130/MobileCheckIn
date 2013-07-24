@@ -1,0 +1,20 @@
+<tr class="result" id = '${INDEX}'>
+	<td>
+		${INDEX}
+	</td>
+	<td class="uid">${UID}</td>
+	<td class="chiname">${CHINAME}</td>
+	<td class="detect-time">${DETECTTIME}</td>
+		{{if STATUS == 0}}
+			<td>&#25104;&#21151;</td>
+		{{else}}
+			{{if STATUS == 1}}
+				<td>&#26410;&#25104;&#21151;</td>
+			{{else}}
+				<td>&#26410;&#31614;&#21040;</td>
+			{{/if}}
+		{{/if}}
+		<!-- Icons -->
+	<td>
+	<td>${DEPARTMENT}</td>
+</tr>

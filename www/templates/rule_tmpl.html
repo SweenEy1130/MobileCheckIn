@@ -1,0 +1,16 @@
+<div class="bulk-actions">
+			当前规则<br><hr>
+			开始时间:<span id="start_time">${STARTTIME}</span>
+			结束时间:<span id="terminal_time">${TERMITIME}</span>
+			<br><br><br>
+</div>
+<div class="clear"></div>
+<div class="bulk-actions">
+	 <form action="/admin/rule" method="GET" onsubmit="return isDate()">
+			设定规则<br><hr>
+			开始时间：<input type="text" id="datepicker1" name="start"/>
+			结束时间：<input type="text" id="datepicker2" name="terminal"/>
+			<br><br>
+			<input id="search_submit" type="button" value="修改">
+	</form>
+</div>

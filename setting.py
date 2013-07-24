@@ -3,7 +3,8 @@
 port=8888
 #server port
 
-domain="202.120.38.26"
+# domain="202.120.38.26"
+domain = "127.0.0.1"
 #domain
 
 #log_file_prefix = 'MCI@8888.log'
@@ -18,7 +19,7 @@ API_SECRET = 'OfvW6DdyM9iqAa8TkBoBhoiWANX6Kn2Z'
 
 # MySQL database config
 dbname = 'root'
-dbpass = 'sjtu2012'
+dbpass = ''
 
 # Jaccount config
 siteID = 'jasignin20130507'

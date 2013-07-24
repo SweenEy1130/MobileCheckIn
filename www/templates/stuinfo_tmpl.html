@@ -1,0 +1,23 @@
+<tr class="result" id = '${INDEX}'>
+	<td>
+		${INDEX}
+	</td>
+	<td class="uid">${UID}</td>
+	<td class="chiname">${CHINAME}</td>
+	<td class="detect-time">${DETECTTIME}</td>
+		{{if STATUS == 0}}
+			<td>&#25104;&#21151;</td>
+		{{else}}
+			{{if STATUS == 1}}
+				<td>&#26410;&#25104;&#21151;</td>
+			{{else}}
+				<td>&#26410;&#31614;&#21040;</td>
+			{{/if}}
+		{{/if}}
+		<!-- Icons -->
+	<td>
+
+	<img onclick="EditFunction(${INDEX},1)" src='../static/images/icons/pencil.png' 			title="确认此次签到"	alt="Edit" />
+	<img onclick="EditFunction(${INDEX},2)" src='../static/images/icons/hammer_screwdriver.png' title="重置该用户" 	 	alt="Reset" />
+	<img onclick="EditFunction(${INDEX},3)" src='../static/images/icons/cross.png' 				title="删除此次签到"	alt="Delete" />
+</tr>

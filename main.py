@@ -21,11 +21,11 @@ import tornado.options
 import logging
 import os
 
-from admin import TimeQueryHandler,TimeHandler,MapQueryHandler,MapHandler,SettingHandler,DeleteAdminHandler,ManageHandler,RuleHandler,CheckHandler,StudentEditHandler,StudentHandler,adminHandler,AdminJaLoginHandler,AdminJaLogoutHandler
+from admin import AddAdminHandler , DefaultRuleHandler , AdminIndexHandler , TimeQueryHandler,TimeHandler,MapQueryHandler,MapHandler,SettingHandler,DeleteAdminHandler,ManageHandler,RuleHandler,CheckHandler,StudentEditHandler,StudentHandler,adminHandler,AdminJaLoginHandler,AdminJaLogoutHandler
 from jalogin import JaLoginHandler,JaLogoutHandler
 from basic import LoginHandler , RegisterHandler , DetectCreateHandler , DetectResultHandler , CheckStatusHandler
 from face import FaceppHandler , FaceRegisterHandler
-from sv import SpeechTrainHandler,SpeechDetectHandler
+# from sv import SpeechTrainHandler,SpeechDetectHandler
 from location import UploadLocationHandler, LocationRegisterHandler
 import setting
 
@@ -33,17 +33,17 @@ class Application(tornado.web.Application):
 	def __init__(self):
 		handlers = [
 			# Mobile API
-			(r"/jalogin", JaLoginHandler),
-			(r"/jalogout",JaLogoutHandler),
-			(r"/faceverify" , FaceppHandler),
-			(r"/faceregister" , FaceRegisterHandler),
-			(r"/svdetect" , SpeechDetectHandler),
-			(r"/svtrain", SpeechTrainHandler),
-			(r"/detectcreate", DetectCreateHandler),
-			(r"/getdetectresult" , DetectResultHandler),
-			(r"/uploadlocation", UploadLocationHandler),
-			(r"/registerlocation", LocationRegisterHandler),
-			(r"/checkstatus" , CheckStatusHandler),
+			# (r"/jalogin", JaLoginHandler),
+			# (r"/jalogout",JaLogoutHandler),
+			# (r"/faceverify" , FaceppHandler),
+			# (r"/faceregister" , FaceRegisterHandler),
+			# (r"/svdetect" , SpeechDetectHandler),
+			# (r"/svtrain", SpeechTrainHandler),
+			# (r"/detectcreate", DetectCreateHandler),
+			# (r"/getdetectresult" , DetectResultHandler),
+			# (r"/uploadlocation", UploadLocationHandler),
+			# (r"/registerlocation", LocationRegisterHandler),
+			# (r"/checkstatus" , CheckStatusHandler),
 
 			# Admin
 			(r"/admin", adminHandler),
@@ -52,19 +52,23 @@ class Application(tornado.web.Application):
 			(r"/admin/student", StudentHandler),
 			(r"/admin/student/edit", StudentEditHandler),
 			(r"/admin/checkin",CheckHandler),
+			(r"/admin/default_rule", DefaultRuleHandler),
 			(r"/admin/rule", RuleHandler),
 			(r"/admin/manage", ManageHandler),
+			(r"/admin/addadmin" , AddAdminHandler),
 			(r"/admin/manage/delete", DeleteAdminHandler),
 			(r"/admin/setting", SettingHandler),
 			(r"/admin/map_stat", MapHandler),
 			(r"/admin/map_stat/search", MapQueryHandler),
 			(r"/admin/time_stat", TimeHandler),
 			(r"/admin/time_stat/([0-9]+)", TimeQueryHandler),
+
+			(r"/admin/index" , AdminIndexHandler)
 		]
 
 		settings = dict(
-			template_path = os.path.join(os.path.dirname(__file__), "templates").encode("gbk"), 
-			static_path = os.path.join(os.path.dirname(__file__), 'static').encode("gbk"),
+			template_path = os.path.join(os.path.dirname(__file__), "www/templates").encode("gbk"), 
+			static_path = os.path.join(os.path.dirname(__file__), 'www').encode("gbk"),
 			cookie_secret = "bZJc2sWbQLKos6GkHn/VB9oXwQt8S0R0kRvJ5/xJ89E=",
 			debug = True,
 		)
