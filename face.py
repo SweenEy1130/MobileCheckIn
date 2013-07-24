@@ -44,7 +44,7 @@ class FaceppHandler(BaseHandler):
 			return
 		else:
 			face_detect = json.loads(response.body)
-
+			print face_detect
 			if face_detect['face'] == []:
 				# print 'error:3;info:NO FACE'
 				self.write({'error':3 , 'info':'NO FACE'})
@@ -69,7 +69,7 @@ class FaceppHandler(BaseHandler):
 			print 'error:0;	similarity:	%f' % similarity			
 			self.write({"error":0,"similarity":similarity})
 		else:
-			# print 'error:3;info:no similarity'
+			print 'error:3;info:no similarity'
 			self.write({"error":1})
 			
 		self.finish() 
@@ -137,7 +137,7 @@ class FaceRegisterHandler(BaseHandler):
 			return
 		else:
 			face_detect = json.loads(response.body)
-
+			print face_detect
 			if face_detect['face'] == []:
 				# print 'error:5;info:No face is detected'
 				self.write({'error':5,'info':'No face is detected'})
@@ -158,6 +158,7 @@ class FaceRegisterHandler(BaseHandler):
 
 		elif (add_face["success"] == True):
 			self.db.execute("UPDATE USER SET IMAGESAMPLE = \'%s\' WHERE UID = %s" % (self.tmp_face1 , self.uid))
+			
 			self.write({"error":0,"faceid":self.tmp_face1})
 
 		else:

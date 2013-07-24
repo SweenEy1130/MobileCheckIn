@@ -38,13 +38,14 @@ class JaLoginHandler(BaseHandler):
             jatkt = self.get_argument('jatkt')
             data = decrypt(jatkt,iv)
             data = find(data,ur'ja[\s\S]*')
-            data.decode('utf-8').encode('gbk')
-            ProfileData = splitdata(data.decode('utf-8'))
-            # print data.decode('utf-8')
+
+            ProfileData = splitdata(data)
+
             if ProfileData['ja3rdpartySessionID'] != iv:
 		self.add_header('error',1)
                 # self.write({"error":1})
                 return
+
             self.update_user(ProfileData)
             self.set_secure_cookie('uid' , ProfileData['id'] , None)
             self.set_cookie('chiname' , ProfileData['chinesename'] , None)
