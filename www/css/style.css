@@ -498,31 +498,15 @@ form .wysiwyg {
 				color: #333;
 		}
 	    
-form .small-input {
-		width: 35% !important;
-		}
-		
-form .medium-input {
-		width: 50% !important;
-		}
-		
-form .large-input {
-		width: 97.5% !important;
-				font-size: 20px !important;
-				padding: 8px !important;
-		}
-		
-form textarea {
-		width: 97.5% !important;
-		font-family: Arial, Helvetica, sans-serif;
-		}
+/*form .small-input {
+		width: 25% !important;
+		}*/
 		
 form select {
 		padding: 4px;
 		background: #fff;
 		}
 				
-form input[type="checkbox"],
 form input[type="radio"] {
 				padding: 0;
 		background: none;
