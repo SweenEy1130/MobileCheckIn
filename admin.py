@@ -25,7 +25,7 @@ class adminHandler(BaseHandler):
 			else:
 				self.render("login.html", notification = "请输入用户名和密码")
 		else:
-			self.redirect("/admin/student")
+			self.redirect("/admin/index")
 
 	def post(self):
 		username=self.get_argument('username',None)
