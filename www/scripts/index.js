@@ -551,7 +551,7 @@ function ManageAdmin(){
 		$("#search_submit").bind('click' , function(argument) {
 			var snum = $("#StuId").val();
 			if(ischeckNum(snum , "option2")){
-				var url = domain + '/admin/addaddmin?number=' + snum;
+				var url = domain + '/admin/addadmin?number=' + snum;
 				$.ajax({
 					url:  url,
 					async: true,
