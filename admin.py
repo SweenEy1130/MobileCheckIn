@@ -322,11 +322,12 @@ class AddAdminHandler(BaseHandler):
 			self.redirect("/admin")
 		else:
 			StuID=""
+			res = -1
 			if self.get_argument('number',None):
 				StuID=self.get_argument('number',None)
 				res = self.add_admin(StuID)
+			self.write({'error':res})
 
-			self.write(res)
 			return
 	
 	def add_admin(self,StuID):
@@ -383,20 +384,6 @@ class SettingHandler(BaseHandler):
 		res = self.db.execute(sql)
 		return res
 
-"""Map Statistics Page
-http://domain:port/admin/map_stat
-"""
-class MapHandler(BaseHandler):
-	def get(self):
-		if not self.current_user:
-			self.redirect("/admin")
-		else:
-			start=""
-			terminal=""
-			chiname = self.get_secure_cookie("chiname")
-			self.render("admin_map.html", chiname=chiname , date1=start,date2=terminal)
-			return
-
 """ Handle JSON datetime """
 class ComplexEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -441,20 +428,6 @@ class MapQueryHandler(BaseHandler):
 		date = date.strftime("%Y-%m-%d")
 		date = date + miniute
 		return date
-
-"""Chart Statistics Page
-http://domain:port/admin/time_stat
-"""
-class TimeHandler(BaseHandler):
-	def get(self):
-		if not self.current_user:
-			self.redirect("/admin")
-		else:
-			start=""
-			terminal=""
-			chiname = self.get_secure_cookie("chiname")
-			self.render("admin_time_stat.html", chiname=chiname)
-			return
 
 """Chart Statistics Search API
 http://domain:port/admin/time_stat/([0-9]+)

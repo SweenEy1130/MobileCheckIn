@@ -13,7 +13,15 @@ Created:		24 July 2013
 Copyright:	  (c) Zheng Li 2013
 --------------------------------------------------------------------------
 */
-var content_title = ["学生信息" , "签到查询" , "签到规则" , "签到时间统计" , "签到位置统计" , "添加管理员" , "修改密码"]
+var content_title = ["学生信息" , "签到查询" , "签到规则" , 
+						"签到时间统计" , "签到位置统计" , 
+							"添加管理员" , "修改密码"]
+var notification = ["查询的结果会在下表显示。点击右上角的叉即可关闭提醒。",
+			"您可以在以下版块修改本学期学生报到的时间段，系统将会对在这段时间成功报到的学生进行记录。签到结果可以在-签到查询-中查询到并可将报到信息导出。"	,
+			"下图为学生签到时间分布图：左图为以小时划分的统计图，右图为以月份划分的统计图",
+			"以下为学生签到地理位置统计图，你可以查看指定时间段学生签到的位置分布",
+			"请输入增加新增管理员的学号／工号，以此添加管理员；点击管理员信息中的叉来删除管理员。",
+			"请你的输入新密码。点击右上角的叉即可关闭提醒。"]
 var domain = window.location.protocol + '//' + window.location.host;
 
 function CheckPsw(){
@@ -183,6 +191,8 @@ function ShowStudentInfo() {
 
 	$("#student-tab").addClass("current");
 
+	/* notification */
+	$("#notification-banner").html(notification[0]);
 	/* content box */
 	$("#content-title").html(content_title[0]);
 
@@ -238,6 +248,9 @@ function ShowCheckInfo() {
 	$(".current").not(".nav-top-item").removeClass("current");
 
 	$("#checkin-tab").addClass("current");
+
+	/* notification */
+	$("#notification-banner").html(notification[0]);
 
 	/* content box */
 	$("#content-title").html(content_title[1]);
@@ -302,6 +315,9 @@ function ModifyRule(){
 	/* content box */
 	$("#content-title").html(content_title[2]);
 
+	/* notification */
+	$("#notification-banner").html(notification[1]);
+
 	// DISPLAY TEMPLATE
 	$.get('/static/templates/rule_tmpl.html', function(data) {
 		$("#content-box-main").empty();		 
@@ -352,6 +368,9 @@ function ShowTimeStat () {
 	$(".current").not(".nav-top-item").removeClass("current");
 
 	$("#time-tab").addClass("current");
+
+	/* notification */
+	$("#notification-banner").html(notification[2]);
 
 	/* content box */
 	$("#content-title").html(content_title[3]);
@@ -410,6 +429,9 @@ function ShowMapStat () {
 	$(".current").not(".nav-top-item").removeClass("current");
 
 	$("#map-tab").addClass("current");
+
+	/* notification */
+	$("#notification-banner").html(notification[3]);
 
 	/* content box */
 	$("#content-title").html(content_title[4]);
@@ -483,6 +505,9 @@ function ManageAdmin(){
 
 	$("#manage-tab").addClass("current");
 
+	/* notification */
+	$("#notification-banner").html(notification[4]);
+
 	/* content box */
 	$("#content-title").html(content_title[5]);
 
@@ -549,6 +574,9 @@ function PswSetting(){
 	$(".current").not(".nav-top-item").removeClass("current");
 
 	$("#setting-tab").addClass("current");
+
+	/* notification */
+	$("#notification-banner").html(notification[5]);
 
 	/* content box */
 	$("#content-title").html(content_title[6]);
