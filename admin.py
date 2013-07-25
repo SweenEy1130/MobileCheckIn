@@ -6,6 +6,14 @@ import random,string,json
 from jaccount import encrypt , decrypt , find , splitdata
 from setting import siteID,port,domain
 
+def datetime_handler(obj):
+	if hasattr(obj, 'isoformat'):
+		return obj.isoformat()
+	elif isinstance(obj, None):
+		return None
+	else:
+		raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
+
 """Admin Main Page
 http://domain:port/admin
 """
@@ -17,7 +25,7 @@ class adminHandler(BaseHandler):
 			else:
 				self.render("login.html", notification = "请输入用户名和密码")
 		else:
-			self.redirect("/admin/student")
+			self.redirect("/admin/index")
 
 	def post(self):
 		username=self.get_argument('username',None)
@@ -113,12 +121,15 @@ class StudentHandler(BaseHandler):
 		else:
 			info=[]
 			q=""
+			self.clear_header("Content-Type")
+			self.set_header("Content-Type", "application/json")
 			if self.get_argument('op',None) and self.get_argument('q',None):
 				option=self.get_argument('op',None)
 				q=self.get_argument('q',None)
 				info = self.query(option,q)
-			chiname = self.get_secure_cookie("chiname")
-			self.render("admin_student.html", chiname=chiname , query_json=info , q=q)
+				self.write(json.dumps(info))
+			else:
+				self.write("Missing Argument!")
 			return
 
 	def query(self,option,q):
@@ -132,17 +143,10 @@ class StudentHandler(BaseHandler):
 		elif(option == 'option3'):
 			info = self.db.query('SELECT U.UID,U.USERNAME,U.CHINAME,D.DETECTTIME,D.STATUS FROM USER U LEFT OUTER JOIN \
 								DETECT D ON U.UID = D.OWNER WHERE U.USERNAME=\'%s\'' % (q))
-		# for item in info:
-		# 	item['DETECTTIME'] = self.datetiem_handler(item['DETECTTIME'])
-		return info
+		for item in info:
+			item['DETECTTIME'] = datetime_handler(item['DETECTTIME'])
 
-	def datetiem_handler(self,obj):
-		if hasattr(obj, 'isoformat'):
-			return obj.isoformat()
-		elif isinstance(obj, None):
-			return None
-		else:
-			raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
+		return info
 
 """Student Information Edit API
 http://domain:port/admin/student/edit?uid=...&dt=...&op=...
@@ -156,7 +160,7 @@ class StudentEditHandler(BaseHandler):
 						self.get_argument('op',None)):
 				uid=str(self.get_argument('uid',None))
 				dt=self.get_argument('dt',None)
-				op=self.get_argument('op',None)
+				op=self.get_argument('op',None).replace("T"," ")
 				if(op == '1'):
 					sql = 'UPDATE DETECT SET STATUS=0 WHERE\
 					 OWNER=%s AND DETECTTIME=\'%s\';' % (uid,dt)
@@ -193,8 +197,9 @@ class CheckHandler(BaseHandler):
 				start=self.get_argument('start',None)
 				terminal=self.get_argument('terminal',None)
 				info = self.query(start,terminal)
-			chiname = self.get_secure_cookie("chiname")
-			self.render("admin_checkin.html", chiname=chiname , query_json=info , date1=start,date2=terminal)
+				self.write(json.dumps(info))
+			else:
+				self.write("Missing Argument!")
 			return
 	
 	def query(self,start,terminal):
@@ -204,6 +209,10 @@ class CheckHandler(BaseHandler):
 		 		FROM USER U, DETECT D WHERE U.UID = D.OWNER AND \
 		 			D.DETECTTIME <= \'%s\' AND D.DETECTTIME >=\'%s\';' % (terminal,start)
 		info = self.db.query(sql)
+
+		for item in info:
+			item['DETECTTIME'] = datetime_handler(item['DETECTTIME'])
+
 		return info
 
 	def date2time(self,date,miniute):
@@ -213,8 +222,31 @@ class CheckHandler(BaseHandler):
 		date = date + miniute
 		return date
 
+class DefaultRuleHandler(BaseHandler):
+	def get(self):
+		if not self.current_user:
+			self.redirect("/admin")
+		else:
+			info = {}
+			startime = ""
+			termtime = ""
+
+			sql = "SELECT STARTTIME,TERMITIME FROM LOCATION WHERE LOCATIONNAME = 'SJTU';"
+			default = self.db.query(sql)
+	
+			if default:
+				startime = default[0]["STARTTIME"]
+				termtime = default[0]["TERMITIME"]
+	
+			info["STARTTIME"] = datetime_handler(startime)
+			info["TERMITIME"] = datetime_handler(termtime)
+
+			self.write(json.dumps(info))
+
+		return
+
 """Set Checkin Time Rule Page
-http://domain:port/admin/rule
+http://domain:port/admin/rule?start= &terminal=
 """
 class RuleHandler(BaseHandler):
 	def get(self):
@@ -222,24 +254,16 @@ class RuleHandler(BaseHandler):
 			self.redirect("/admin")
 		else:
 			info=[]
-			start=""
-			terminal=""
-			startime=""
-			termtime=""
+
 			if self.get_argument('start',None) and self.get_argument('terminal',None):
 				start=self.get_argument('start',None)
 				terminal=self.get_argument('terminal',None)
 				info = self.query(start,terminal)
-			chiname = self.get_secure_cookie("chiname")
-			sql = "SELECT STARTTIME,TERMITIME FROM LOCATION WHERE LOCATIONNAME = 'SJTU';"
-			default = self.db.query(sql)
-			if default:
-				startime = default[0]["STARTTIME"]
-				termtime = default[0]["TERMITIME"]
-			self.render("admin_rule.html", chiname=chiname ,\
-							startime=startime,termtime=termtime ,\
-							 date1=start,date2=terminal)
+
+			self.write(json.dumps(info))
+
 			return
+
 	def query(self,start,terminal):
 		start = self.date2time(start," 00:00:00")
 		terminal = self.date2time(terminal ,' 23:59:59')
@@ -270,7 +294,9 @@ class ManageHandler(BaseHandler):
 				res = self.add_admin(StuID)
 			chiname = self.get_secure_cookie("chiname")
 			info = self.query()
-			self.render("admin_manage.html", chiname=chiname , query_json=info , StuID=StuID)
+
+			self.write(json.dumps(info))
+			
 			return
 	
 	def query(self):
@@ -278,6 +304,32 @@ class ManageHandler(BaseHandler):
 		info = self.db.query(sql)
 		return info
 
+	def add_admin(self,StuID):
+		sql='SELECT UID FROM ADMINISTRATOR WHERE UID=%s;' %StuID
+		res = self.db.query(sql)
+		if not res:
+			sql='INSERT INTO ADMINISTRATOR(UID) VALUES(%s);' % StuID
+			info = self.db.execute(sql)
+			return 0
+		return -1
+
+"""Add Administrator List Page
+http://domain:port/admin/addadmin
+"""
+class AddAdminHandler(BaseHandler):
+	def get(self):
+		if not self.current_user:
+			self.redirect("/admin")
+		else:
+			StuID=""
+			res = -1
+			if self.get_argument('number',None):
+				StuID=self.get_argument('number',None)
+				res = self.add_admin(StuID)
+			self.write({'error':res})
+
+			return
+	
 	def add_admin(self,StuID):
 		sql='SELECT UID FROM ADMINISTRATOR WHERE UID=%s;' %StuID
 		res = self.db.query(sql)
@@ -321,8 +373,9 @@ class SettingHandler(BaseHandler):
 					alert="密码修改失败！"
 				else:
 					alert="密码修改成功！"
-			chiname = self.get_secure_cookie("chiname")
-			self.render("admin_setting.html", chiname=chiname,notif=alert)
+
+			self.write(alert)
+			
 			return
 
 	def set_password(self,psw,uid):
@@ -330,20 +383,6 @@ class SettingHandler(BaseHandler):
 					% (psw,uid)
 		res = self.db.execute(sql)
 		return res
-
-"""Map Statistics Page
-http://domain:port/admin/map_stat
-"""
-class MapHandler(BaseHandler):
-	def get(self):
-		if not self.current_user:
-			self.redirect("/admin")
-		else:
-			start=""
-			terminal=""
-			chiname = self.get_secure_cookie("chiname")
-			self.render("admin_map.html", chiname=chiname , date1=start,date2=terminal)
-			return
 
 """ Handle JSON datetime """
 class ComplexEncoder(json.JSONEncoder):
@@ -390,20 +429,6 @@ class MapQueryHandler(BaseHandler):
 		date = date + miniute
 		return date
 
-"""Chart Statistics Page
-http://domain:port/admin/time_stat
-"""
-class TimeHandler(BaseHandler):
-	def get(self):
-		if not self.current_user:
-			self.redirect("/admin")
-		else:
-			start=""
-			terminal=""
-			chiname = self.get_secure_cookie("chiname")
-			self.render("admin_time_stat.html", chiname=chiname)
-			return
-
 """Chart Statistics Search API
 http://domain:port/admin/time_stat/([0-9]+)
 """
@@ -428,3 +453,17 @@ class TimeQueryHandler(BaseHandler):
 				self.write(json.dumps(info))
 			else:
 				self.write('-1')
+
+"""
+Admin Index
+http://domain:port/admin/index
+"""
+class AdminIndexHandler(BaseHandler):
+	def get(self):
+		if not self.current_user:
+			self.redirect("/admin")
+		else:
+			print self.get_template_path()
+			chiname = self.get_secure_cookie("chiname")
+			self.render("index.html", chiname=chiname)
+			return

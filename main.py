@@ -21,7 +21,7 @@ import tornado.options
 import logging
 import os
 
-from admin import TimeQueryHandler,TimeHandler,MapQueryHandler,MapHandler,SettingHandler,DeleteAdminHandler,ManageHandler,RuleHandler,CheckHandler,StudentEditHandler,StudentHandler,adminHandler,AdminJaLoginHandler,AdminJaLogoutHandler
+from admin import AddAdminHandler , DefaultRuleHandler , AdminIndexHandler , TimeQueryHandler ,MapQueryHandler,SettingHandler,DeleteAdminHandler,ManageHandler,RuleHandler,CheckHandler,StudentEditHandler,StudentHandler,adminHandler,AdminJaLoginHandler,AdminJaLogoutHandler
 from jalogin import JaLoginHandler,JaLogoutHandler
 from basic import LoginHandler , RegisterHandler , DetectCreateHandler , DetectResultHandler , CheckStatusHandler
 from face import FaceppHandler , FaceRegisterHandler
@@ -49,22 +49,25 @@ class Application(tornado.web.Application):
 			(r"/admin", adminHandler),
 			(r"/admin/jalogin" , AdminJaLoginHandler),
 			(r"/admin/logout" , AdminJaLogoutHandler),
+			(r"/admin/index" , AdminIndexHandler),
+
+			# Admin API
 			(r"/admin/student", StudentHandler),
 			(r"/admin/student/edit", StudentEditHandler),
 			(r"/admin/checkin",CheckHandler),
+			(r"/admin/default_rule", DefaultRuleHandler),
 			(r"/admin/rule", RuleHandler),
 			(r"/admin/manage", ManageHandler),
+			(r"/admin/addadmin" , AddAdminHandler),
 			(r"/admin/manage/delete", DeleteAdminHandler),
 			(r"/admin/setting", SettingHandler),
-			(r"/admin/map_stat", MapHandler),
 			(r"/admin/map_stat/search", MapQueryHandler),
-			(r"/admin/time_stat", TimeHandler),
-			(r"/admin/time_stat/([0-9]+)", TimeQueryHandler),
+			(r"/admin/time_stat/([0-9]+)", TimeQueryHandler)
 		]
 
 		settings = dict(
-			template_path = os.path.join(os.path.dirname(__file__), "templates").encode("gbk"), 
-			static_path = os.path.join(os.path.dirname(__file__), 'static').encode("gbk"),
+			template_path = os.path.join(os.path.dirname(__file__), "www/templates").encode("gbk"), 
+			static_path = os.path.join(os.path.dirname(__file__), 'www').encode("gbk"),
 			cookie_secret = "bZJc2sWbQLKos6GkHn/VB9oXwQt8S0R0kRvJ5/xJ89E=",
 			debug = True,
 		)
