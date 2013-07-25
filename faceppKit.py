@@ -9,7 +9,7 @@ import tornado.httpclient
 import itertools
 import mimetools
 import mimetypes
-from settings import API_KEY,API_SECRET
+from setting import API_KEY,API_SECRET
 
 FACEPP_SERVER = "https://apicn.faceplusplus.com/v2"
 
