@@ -1,11 +1,11 @@
-##1.安装iconv##
+## 1.安装iconv ##
 
 http://www.gnu.org/software/libiconv
 
-##2.复制libspeakerverify.so##
+## 2.复制libspeakerverify.so ##
 `sudo cp libspeakerverify.so /usr/local/lib`
 
-##3.设置搜索路径##
+## 3.设置搜索路径 ##
 
 `vi /etc/ld.so.conf`
 加入
@@ -13,7 +13,7 @@ http://www.gnu.org/software/libiconv
 运行
 `ldconfig`
 
-##4.Compile ##
+## 4.Compile ##
 
 Compile C
 `gcc sv_api.c -o AI_SV -L. -lspeakerverify -m64`
