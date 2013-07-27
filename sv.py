@@ -65,7 +65,7 @@ class SpeechTrainHandler(BaseHandler):
 
 		try:
 			ret = sv_dll.SVtrain3("sv/sv.0.0.3.2.bin" , "static/audio_mod/%s.bin" % (tmp_uid) , file1 , file2 , file3)
->>>>>>> c35f6df8cb9b507f54f3afa5d906eafbe9581444
+
 			# print ret
 			if (ret == 1):
 				print "error:1;info:newEngine error"
