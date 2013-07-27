@@ -64,9 +64,8 @@ class SpeechTrainHandler(BaseHandler):
 		picfile.close()
 
 		try:
-			ret = sv_dll.SVtrain("./sv/sv.0.0.3.2.bin" , "./static/audio_mod/%s.bin" % (tmp_uid) , file1 , file2 , file3)
+			ret = sv_dll.SVtrain3("./sv/sv.0.0.3.2.bin" , "./static/audio_mod/%s.bin" % (tmp_uid) , file1 , file2 , file3)
 			# print ret
-			print file1,file2,file3
 			if (ret == 1):
 				print "error:1;info:newEngine error"
 				self.write({"error": 2})

@@ -8,7 +8,7 @@ sv_dll.SVdetect.restype = c_double
 
 def SVtrain(uid , file1 , file2 , file3):
 	try:
-		ret = sv_dll.SVtrain("../sv/sv.0.0.3.2.bin" , "audio_mod/%s.bin" % (uid) , file1 , file2 , file3)
+		ret = sv_dll.SVtrain3("../sv/sv.0.0.3.2.bin" , "audio_mod/%s.bin" % (uid) , file1 , file2 , file3)
 		# print ret
 		if (ret == 1):
 			return "error:1;info:newEngine error"

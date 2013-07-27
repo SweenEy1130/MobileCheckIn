@@ -44,9 +44,9 @@ class FaceppHandler(BaseHandler):
 			return
 		else:
 			face_detect = json.loads(response.body)
-			print face_detect
+			# print face_detect
 			if face_detect['face'] == []:
-				# print 'error:3;info:NO FACE'
+				print 'error:3;info:NO FACE'
 				self.write({'error':3 , 'info':'NO FACE'})
 				self.finish()
 				return
@@ -77,12 +77,12 @@ class FaceppHandler(BaseHandler):
 	@tornado.web.asynchronous
 	def post(self):
 		if not self.current_user:
-			# print 'error:2;info:not login'
+			print 'error:2;info:not login'
 			self.write({"error":2})
 			self.finish()
 			return
 		if (not self.get_secure_cookie("sessionid")):
-			# print 'error:4;info:not create'
+			print 'error:4;info:not create'
 			self.write({"error":4})
 			self.finish()
 			return
@@ -137,9 +137,9 @@ class FaceRegisterHandler(BaseHandler):
 			return
 		else:
 			face_detect = json.loads(response.body)
-			print face_detect
+			# print face_detect
 			if face_detect['face'] == []:
-				# print 'error:5;info:No face is detected'
+				print 'error:5;info:No face is detected'
 				self.write({'error':5,'info':'No face is detected'})
 				self.finish()
 				return
