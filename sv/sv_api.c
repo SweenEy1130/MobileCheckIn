@@ -128,11 +128,11 @@ double SVdetect(char * sv_cfg_fn , char * sv_output_engine , char *wav_detect , 
 int main()
 {
 	int ret;
-	ret = SVtrain3("sv.0.0.3.2.bin" , "test.bin" , "test.wav", "test.wav", "test.wav");
+	ret = SVtrain3("sv.0.0.3.2.bin" , "test.bin" , "1.wav", "2.wav", "3.wav");
 	printf("SVtrain:\t%d\n", ret);
 
 	double conf = 0.0;
-	conf = SVdetect("sv.0.0.3.2.bin" , "test.bin", "test.wav" , 1.5 , 1);
+	conf = SVdetect("sv.0.0.3.2.bin" , "test.bin", "1.wav" , 1.5 , 1);
 	printf("SVdetect\t%f\n", conf);
 	return 0;
 }
