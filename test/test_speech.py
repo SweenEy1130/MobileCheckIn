@@ -28,8 +28,8 @@ def SVdetect(uid , filename):
 		return "error:-1;info:failure in detect"
 
 if __name__ == '__main__':
-	ret = SVtrain(5101109071 , "audio/51011090711578985057.wav" , "audio/51011090711578985345.wav" , "audio/51011090711578985516.wav")
+	ret = SVtrain(5101109071 , "audio/1.wav" , "audio/2.wav" , "audio/3.wav")
 	print ret
 
-	ret = SVdetect(5101109071 , "audio/51011090711578985057.wav")
+	ret = SVdetect(5101109071 , "audio/1.wav")
 	print ret
