@@ -6,9 +6,9 @@ sv_dll.SVtrain.argtypes = [c_char_p , c_char_p , c_char_p , c_char_p , c_char_p]
 sv_dll.SVdetect.argtypes = [c_char_p , c_char_p , c_char_p , c_double , c_int]
 sv_dll.SVdetect.restype = c_double
 
-def SVtrain(file1 , file2 , file3 , uid):
+def SVtrain(uid , file1 , file2 , file3):
 	try:
-		ret = sv_dll.SVtrain("./sv/sv.0.0.3.2.bin" , "./static/audio_mod/%s.bin" % (uid) , file1 , file2 , file3)
+		ret = sv_dll.SVtrain("../sv/sv.0.0.3.2.bin" , "audio_mod/%s.bin" % (uid) , file1 , file2 , file3)
 		# print ret
 		if (ret == 1):
 			return "error:1;info:newEngine error"
@@ -22,8 +22,14 @@ def SVtrain(file1 , file2 , file3 , uid):
 def SVdetect(uid , filename):
 
 	try:
-		ret = sv_dll.SVdetect("./sv/sv.0.0.3.2.bin" , "./static/audio_mod/%s.bin" % (uid) , filename , 0.7 ,1)
+		ret = sv_dll.SVdetect("../sv/sv.0.0.3.2.bin" , "audio_mod/%d.bin" % (uid) , filename , 0.7 ,1)
 		return ret
 	except:
 		return "error:-1;info:failure in detect"
 
+if __name__ == '__main__':
+	ret = SVtrain(5101109071 , "audio/51011090711578985057.wav" , "audio/51011090711578985345.wav" , "audio/51011090711578985516.wav")
+	print ret
+
+	ret = SVdetect(5101109071 , "audio/51011090711578985057.wav")
+	print ret

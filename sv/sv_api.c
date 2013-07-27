@@ -106,7 +106,7 @@ Response:
 0:verify failed;
 other: return the index of voice resource
 */
-int SVdetect(char * sv_cfg_fn , char * sv_output_engine , char *wav_detect , double thresh , int res_num)
+double SVdetect(char * sv_cfg_fn , char * sv_output_engine , char *wav_detect , double thresh , int res_num)
 {
 	double conf=0.0;
 	char *data;
@@ -124,21 +124,15 @@ int SVdetect(char * sv_cfg_fn , char * sv_output_engine , char *wav_detect , dou
 	releaseSVEngineDetect(detect);
 	return conf;
 }
-char* test(char *str , double d , int n)    
-{    
-    puts(str);
-    printf("The double is :%f\n", d);
-    printf("The int is :%d\n", n); 
-    return str;    
-}
 
-
-/*int main()
+int main()
 {
 	int ret;
-	ret = SVtrain("sv.0.0.3.2.bin" , "test.bin" , "test.wav");
-	printf("%d\n", ret);
-	ret = SVdetect("sv.0.0.3.2.bin" , "test.bin", "test.wav" , 1.5 , 1);
-	printf("%d\n", ret);
+	ret = SVtrain3("sv.0.0.3.2.bin" , "test.bin" , "test.wav", "test.wav", "test.wav");
+	printf("SVtrain:\t%d\n", ret);
+
+	double conf = 0.0;
+	conf = SVdetect("sv.0.0.3.2.bin" , "test.bin", "test.wav" , 1.5 , 1);
+	printf("SVdetect\t%f\n", conf);
 	return 0;
-}*/
+}
