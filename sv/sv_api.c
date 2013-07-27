@@ -59,6 +59,48 @@ int SVtrain(char * sv_cfg_fn , char * sv_output_engine , char * wav_train)
 	return 0;
 }
 
+
+/*
+Response:
+0:success
+1:newSVEngine error
+2:speaker adapt model failed
+*/
+int SVtrain3(char * sv_cfg_fn , char * sv_output_engine , char * wav_train1 , char * wav_train2 , char * wav_train3)
+{
+	char * data;
+	long len;
+	int ret=0;
+	
+	SVEngine *adapt = 0;
+	adapt = newSVEngineAdapt(sv_cfg_fn , sv_output_engine , 0);
+	if(adapt == NULL)
+		return 1;
+
+	// train engine
+	data = _file_read_buf(wav_train1 , &len);
+	ret = writeAudioToSVEngineAdaptPass1(adapt , data + 44 , len - 44);
+	free(data);
+
+	// train engine
+	data = _file_read_buf(wav_train2 , &len);
+	ret = writeAudioToSVEngineAdaptPass1(adapt , data + 44 , len - 44);
+	free(data);
+
+	// train engine
+	data = _file_read_buf(wav_train3 , &len);
+	ret = writeAudioToSVEngineAdaptPass1(adapt , data + 44 , len - 44);
+	free(data);
+
+	// generate model
+	ret = writeAudioToSVEngineAdaptPass2(adapt);
+	if(ret != 0)
+		return 2;
+	
+	releaseSVEngineAdapt(adapt);
+	return 0;
+}
+
 /*
 Response:
 0:verify failed;
