@@ -152,13 +152,13 @@ class FaceRegisterHandler(BaseHandler):
 
 	def handle_request2(self,response):
 		add_face=json.loads(response.body)
+		print add_face
 
 		if (not add_face.has_key("success")):
 			self.write({"error":3})
 
 		elif (add_face["success"] == True):
 			self.db.execute("UPDATE USER SET IMAGESAMPLE = \'%s\' WHERE UID = %s" % (self.tmp_face1 , self.uid))
-			
 			self.write({"error":0,"faceid":self.tmp_face1})
 
 		else:
