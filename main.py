@@ -82,6 +82,6 @@ if __name__ == "__main__":
 	tornado.options.parse_command_line()
 	logging.info("Welcome to Mobile Checkin Server!")
 
-	http_server = tornado.httpserver.HTTPServer(Application())
+	http_server = tornado.httpserver.HTTPServer(Application(), xheaders=True)
 	http_server.listen(tornado.options.options.port)
 	tornado.ioloop.IOLoop.instance().start()

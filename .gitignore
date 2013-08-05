@@ -6,6 +6,7 @@
 *.jpeg
 *.bin
 *.log
+test/output/
 
 # Packages
 *.egg
