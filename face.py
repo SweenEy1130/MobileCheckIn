@@ -11,7 +11,7 @@ import os,json,string
 import faceppKit
 from datetime import datetime
 from basic import BaseHandler
-
+import logging
 """face verification API
 API http://localhost:8000/faceverify
 POST:	http://localhost:8000/faceverify
@@ -38,15 +38,14 @@ class FaceppHandler(BaseHandler):
 	@tornado.web.asynchronous
 	def handle_request(self,response):
 		if response.error:
-			# print 'error:1;info:'+response.error
+			logging.info( 'error:1;info:'+response.error)
 			self.write({'error':1,'info':response.error})
 			self.finish()
 			return
 		else:
 			face_detect = json.loads(response.body)
-			# print face_detect
 			if face_detect['face'] == []:
-				print 'error:3;info:NO FACE'
+				logging.info('error:3;info:NO FACE')
 				self.write({'error':3 , 'info':'NO FACE'})
 				self.finish()
 				return
@@ -66,10 +65,10 @@ class FaceppHandler(BaseHandler):
 		if response.has_key("similarity"):
 			similarity = float(response["similarity"])
 			self.db.execute('UPDATE DETECT SET FACEHASH=\'%s\' , FACEDETECT=%f WHERE SESSIONID=%d;' % (self.filename , similarity , self.sessionid))
-			print 'error:0;	similarity:	%f' % similarity			
+			logging.info('error:0;	similarity:	%f' % similarity)			
 			self.write({"error":0,"similarity":similarity})
 		else:
-			print 'error:3;info:no similarity'
+			logging.info('error:3;info:no similarity')
 			self.write({"error":1})
 			
 		self.finish() 
@@ -77,12 +76,12 @@ class FaceppHandler(BaseHandler):
 	@tornado.web.asynchronous
 	def post(self):
 		if not self.current_user:
-			print 'error:2;info:not login'
+			logging.info('error:2;info:not login')
 			self.write({"error":2})
 			self.finish()
 			return
 		if (not self.get_secure_cookie("sessionid")):
-			print 'error:4;info:not create'
+			logging.info('error:4;info:not create')
 			self.write({"error":4})
 			self.finish()
 			return
@@ -131,7 +130,7 @@ class FaceRegisterHandler(BaseHandler):
 	@tornado.web.asynchronous
 	def handle_request(self,response):
 		if response.error:
-			# print 'error:1;info:'+response.error
+			logging.info('error:1;info:'+response.error)
 			self.write({'error':1,'info':response.error})
 			self.finish()
 			return
@@ -139,7 +138,7 @@ class FaceRegisterHandler(BaseHandler):
 			face_detect = json.loads(response.body)
 			# print face_detect
 			if face_detect['face'] == []:
-				print 'error:5;info:No face is detected'
+				logging.info('error:5;info:No face is detected')
 				self.write({'error':5,'info':'No face is detected'})
 				self.finish()
 				return
@@ -152,7 +151,7 @@ class FaceRegisterHandler(BaseHandler):
 
 	def handle_request2(self,response):
 		add_face=json.loads(response.body)
-		print add_face
+		# print add_face
 
 		if (not add_face.has_key("success")):
 			self.write({"error":3})

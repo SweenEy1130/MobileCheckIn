@@ -4,7 +4,7 @@
 # $Author: ronnie.alonso@gmail.com
 #
 #      0. You just DO WHAT THE FUCK YOU WANT TO.
-import os,json,string
+import os,json,string,logging
 from datetime import *
 from ctypes import cdll, c_int , c_char_p , c_double
 from basic import BaseHandler
@@ -36,7 +36,7 @@ error:	0 for success
 class SpeechTrainHandler(BaseHandler):
 	def post(self):
 		if not self.current_user:
-			print "error:1;info:not login"
+			logging.info("error:1;info:not login")
 			self.write({"error":1})
 			return
 
@@ -68,15 +68,15 @@ class SpeechTrainHandler(BaseHandler):
 
 			# print ret
 			if (ret == 1):
-				print "error:1;info:newEngine error"
+				logging.info("error:1;info:newEngine error")
 				self.write({"error": 2})
 				return
 			elif (ret ==2):
-				print "error:2;info:speaker adapt error"
+				logging.info("error:2;info:speaker adapt error")
 				self.write({"error": 3})
 				return
 		except:
-			print "error:-1;info:train error"
+			logging.info("error:-1;info:train error")
 			self.write({"error": -1})
 			return
 
@@ -85,7 +85,7 @@ class SpeechTrainHandler(BaseHandler):
 		self.db.execute('INSERT INTO AUDIO(OWNER,AUDIOHASH,CREATETIME) VALUES(\'%s\',\'%s\',\'%s\');' % (tmp_uid , audio1 ,now))
 		self.db.execute('INSERT INTO AUDIO(OWNER,AUDIOHASH,CREATETIME) VALUES(\'%s\',\'%s\',\'%s\');' % (tmp_uid , audio2 ,now))
 		self.db.execute('INSERT INTO AUDIO(OWNER,AUDIOHASH,CREATETIME) VALUES(\'%s\',\'%s\',\'%s\');' % (tmp_uid , audio3 ,now))
-		print "error:0"		
+		logging.info("error:0;info:success")	
 		self.write({"error": 0})
 
 """speech detect API
@@ -124,7 +124,7 @@ class SpeechDetectHandler(BaseHandler):
 
 		query = self.db.query("SELECT AUDIOENGINE FROM USER WHERE UID = %s" % (tmp_uid))
 		if (not query) or (query[0]['AUDIOENGINE'] == None):
-			print "error:4;info:no initial audio engine"
+			logging.info("error:4;info:no initial audio engine")
 			self.write({"error":4})
 			return
 			
@@ -132,10 +132,10 @@ class SpeechDetectHandler(BaseHandler):
 			ret = sv_dll.SVdetect("sv/sv.0.0.3.2.bin" , "data/audio_mod/%s.bin" % (tmp_uid) , tmp_path , 0.7 ,1)
 			self.db.execute('UPDATE DETECT SET AUDIOHASH = \'%s\', AUDIODETECT = %f WHERE SESSIONID=%d;' % 
 		(audio_name ,ret,sessionid))
-			print "error:0;	similarity:	%f" % (ret)
+			logging.info("error:0;	similarity:	%f" % (ret))
 			self.write({"error": 0})
 			return
 		except:
-			print "error:-1;info:failure in detect"
+			logging.info("error:-1;info:failure in detect")
 			self.write({"error": -1})
 			return
