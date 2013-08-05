@@ -66,8 +66,8 @@ class Application(tornado.web.Application):
 		]
 
 		settings = dict(
-			template_path = os.path.join(os.path.dirname(__file__), "www/templates").encode("gbk"), 
-			static_path = os.path.join(os.path.dirname(__file__), 'www').encode("gbk"),
+			template_path = os.path.join(os.path.dirname(__file__), "static/templates").encode("gbk"), 
+			static_path = os.path.join(os.path.dirname(__file__), 'static').encode("gbk"),
 			cookie_secret = "bZJc2sWbQLKos6GkHn/VB9oXwQt8S0R0kRvJ5/xJ89E=",
 			debug = True,
 		)
@@ -75,12 +75,12 @@ class Application(tornado.web.Application):
 		self.db = tornado.database.Connection(host = 'localhost:3306' , database= 'mobile' , user = setting.dbname , password = setting.dbpass)
 
 if __name__ == "__main__":
-	# print "Welcome to Mobile Checkin Server"
 	tornado.options.define("port",default=8888,type=int)
 	tornado.options.options['port'].set(setting.port)
 	tornado.options.options['logging'].set(setting.logging)
 	# tornado.options.options['log_file_prefix'].set(setting.log_file_prefix)		
 	tornado.options.parse_command_line()
+	logging.info("Welcome to Mobile Checkin Server!")
 
 	http_server = tornado.httpserver.HTTPServer(Application())
 	http_server.listen(tornado.options.options.port)

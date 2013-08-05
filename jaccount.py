@@ -25,7 +25,7 @@ def splitdata(data):
 	return c
 	
 def keydata():
-	f_path = sys.path[0]+"/jasignin20130507_desede.key"
+	f_path = sys.path[0]+"/conf/jasignin20130507_desede.key"
 	f = open(f_path,'rb')
 	f_data = f.read()
 	f.close()

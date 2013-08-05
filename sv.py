@@ -64,7 +64,7 @@ class SpeechTrainHandler(BaseHandler):
 		picfile.close()
 
 		try:
-			ret = sv_dll.SVtrain3("sv/sv.0.0.3.2.bin" , "static/audio_mod/%s.bin" % (tmp_uid) , file1 , file2 , file3)
+			ret = sv_dll.SVtrain3("sv/sv.0.0.3.2.bin" , "data/audio_mod/%s.bin" % (tmp_uid) , file1 , file2 , file3)
 
 			# print ret
 			if (ret == 1):
@@ -129,7 +129,7 @@ class SpeechDetectHandler(BaseHandler):
 			return
 			
 		try:
-			ret = sv_dll.SVdetect("sv/sv.0.0.3.2.bin" , "static/audio_mod/%s.bin" % (tmp_uid) , tmp_path , 0.7 ,1)
+			ret = sv_dll.SVdetect("sv/sv.0.0.3.2.bin" , "data/audio_mod/%s.bin" % (tmp_uid) , tmp_path , 0.7 ,1)
 			self.db.execute('UPDATE DETECT SET AUDIOHASH = \'%s\', AUDIODETECT = %f WHERE SESSIONID=%d;' % 
 		(audio_name ,ret,sessionid))
 			print "error:0;	similarity:	%f" % (ret)
