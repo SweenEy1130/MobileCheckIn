@@ -10,7 +10,7 @@ from setting import port,domain,siteID
 from jaccount import encrypt , decrypt , find , splitdata
 import random,string,json,urllib2
 import faceppKit
-
+import logging, urllib
 
 """用户JACCOUNT LOGIN
 API:	http://localhost:port/jalogin
@@ -47,7 +47,11 @@ class JaLoginHandler(BaseHandler):
 
 			self.update_user(ProfileData)
 			self.set_secure_cookie('uid' , ProfileData['id'] , None)
-			self.set_cookie('chiname' , ProfileData['chinesename'] , None)
+			
+			chiname = urllib.quote(ProfileData['chinesename'])
+			# logging.info(chiname.__class__)
+			self.set_cookie('chiname' , chiname , None)
+			# logging.info(self.cookies)
 			self.add_header('error',0)
 
 	def update_user(self , profile):
