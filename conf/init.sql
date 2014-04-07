@@ -1,58 +1,61 @@
-CREATE TABLE USER(
-    UID BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    USERNAME CHAR(20) ,
-    PASSWORD CHAR(20) ,
-    CHINAME CHAR(20),
-    LOCID INTEGER,
-    IMAGESAMPLE CHAR(100),
-    AUDIOENGINE CHAR(100),
-    CREATETIME DATETIME,
-    DEPARTMENT CHAR(100)
+create database mobile;
+use mobile;
+
+create table user(
+    uid bigint unsigned not null primary key auto_increment,
+    username char(20) ,
+    password char(20) ,
+    chiname char(20),
+    locid integer,
+    imagesample char(100),
+    audioengine char(100),
+    createtime datetime,
+    department char(100)
     );
-ALTER TABLE USER ADD UNIQUE(USERNAME);
-ALTER TABLE USER MODIFY CHINAME CHAR(20) CHARACTER SET GBK;
-ALTER TABLE USER MODIFY DEPARTMENT CHAR(20) CHARACTER SET GBK;
+alter table user add unique(username);
+alter table user modify chiname char(20) character set gbk;
+alter table user modify department char(20) character set gbk;
 
-CREATE TABLE ADMINISTRATOR(
-    UID BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    USERNAME CHAR(20),
-    CHINAME CHAR(20),
-    PASSWORD CHAR(20)
+create table administrator(
+    uid bigint unsigned not null primary key auto_increment,
+    username char(20),
+    chiname char(20),
+    password char(20)
 );
-ALTER TABLE ADMINISTRATOR ADD UNIQUE(USERNAME);
-ALTER TABLE ADMINISTRATOR MODIFY CHINAME CHAR(20) CHARACTER SET GBK;
-INSERT INTO ADMINISTRATOR(USERNAME,PASSWORD) VALUES('admin','admin');
-ALTER TABLE ADMINISTRATOR ADD CONSTRAINT 
-    chk_Admin CHECK (10 >= (SELECT COUNT(*) FROM ADMINISTRATOR));
+alter table administrator add unique(username);
+alter table administrator modify chiname char(20) character set gbk;
+insert into administrator(username,password) values('admin','admin');
+alter table administrator add constraint
+    chk_admin check (10 >= (select count(*) from administrator));
 
-CREATE TABLE AUDIO(
-	OWNER BIGINT UNSIGNED NOT NULL,
-    FOREIGN KEY(OWNER) REFERENCES USER(UID) ON DELETE CASCADE ON UPDATE CASCADE,
-	AUDIOHASH CHAR(100) PRIMARY KEY,
-	CREATETIME DATETIME
+create table audio(
+    owner bigint unsigned not null,
+    foreign key(owner) references user(uid) on delete cascade on update cascade,
+    audiohash char(100) primary key,
+    createtime datetime
 );
 
-CREATE TABLE LOCATION(
-    LOCID INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    LOCATIONNAME CHAR(100),
-    LONGITUDE DOUBLE,
-    LATITUDE DOUBLE,
-    STARTTIME DATETIME,
-    TERMITIME DATETIME
+create table location(
+    locid integer unsigned not null primary key auto_increment,
+    locationname char(100),
+    longitude double,
+    latitude double,
+    starttime datetime,
+    termitime datetime
 );
-ALTER TABLE LOCATION MODIFY LOCATIONNAME CHAR(100) CHARACTER SET GBK;
-INSERT INTO LOCATION(LOCID,LOCATIONNAME,LONGITUDE,LATITUDE) VALUES(1,'SJTU',121.43574714660645,31.024988336871534);
+alter table location modify locationname char(100) character set gbk;
+insert into location(locid,locationname,longitude,latitude) values(1,'sjtu',121.43574714660645,31.024988336871534);
 
-CREATE TABLE DETECT(
-    OWNER BIGINT UNSIGNED NOT NULL,
-    FOREIGN KEY(OWNER) REFERENCES USER(UID) ON DELETE CASCADE ON UPDATE CASCADE,
-    SESSIONID BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    AUDIOHASH CHAR(100),
-    AUDIODETECT DOUBLE,
-    LONGITUDE DOUBLE,
-    LATITUDE DOUBLE,
-    FACEHASH CHAR(100),
-    FACEDETECT FLOAT,
-    DETECTTIME DATETIME,
-    STATUS BOOL
+create table detect(
+    owner bigint unsigned not null,
+    foreign key(owner) references user(uid) on delete cascade on update cascade,
+    sessionid bigint unsigned not null primary key auto_increment,
+    audiohash char(100),
+    audiodetect double,
+    longitude double,
+    latitude double,
+    facehash char(100),
+    facedetect float,
+    detecttime datetime,
+    status bool
 );
